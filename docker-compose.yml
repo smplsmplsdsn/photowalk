@@ -1,0 +1,91 @@
+services:
+  # -----------------------------
+  # Build (Node.js開発用)
+  # -----------------------------
+  build:
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    container_name: service-build
+    working_dir: /app
+    volumes:
+      - ./build:/app:cached        # ソースコード同期
+      - ./build/js:/app/js:cached
+      - ./www/assets:/app/assets:cached   # 完成品のみ同期
+      - build_node_modules:/app/node_modules # node_modules はコンテナ内ボリューム
+    command: tail -f /dev/null
+
+  # -----------------------------
+  # Nginx (静的/PHPフロント)
+  # -----------------------------
+  nginx:
+    image: nginx:latest
+    container_name: service-nginx
+    ports:
+      - "8088:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+    networks:
+      - service-net
+
+  # -----------------------------
+  # PHP-FPM
+  # -----------------------------
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: service-php
+    volumes:
+      - ./www:/var/www/html
+    networks:
+      - service-net
+
+  # -----------------------------
+  # MySQL
+  # -----------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: service-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: service_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - service_db_data:/var/lib/mysql
+    networks:
+      - service-net
+
+  # -----------------------------
+  # phpMyAdmin
+  # -----------------------------
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: service-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8089:80"
+    depends_on:
+      - mysql
+    networks:
+      - service-net
+
+# -----------------------------
+# ボリューム
+# -----------------------------
+volumes:
+  build_node_modules:
+  service_db_data:
+
+# -----------------------------
+# ネットワーク
+# -----------------------------
+networks:
+  service-net:
+    driver: bridge

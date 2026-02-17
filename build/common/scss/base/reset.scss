@@ -1,0 +1,229 @@
+$max-width-form: 400px;
+$border-radius-form: 4px;
+$border-color-form: #ccc;
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+body {
+  word-break: break-word;
+}
+
+body {
+  word-wrap: break-word;
+}
+
+// pre iOSで自動改行される問題に対応する
+pre {
+  word-break: normal;
+}
+pre {
+  word-wrap: normal;
+}
+
+main,
+article,
+section,
+header,
+footer,
+aside,
+dl,
+dt,
+dd,
+h1, h2, h3, h4, h5, h6,
+p,
+form,
+figcaption {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li{
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+img,
+figure{
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+small {
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+}
+
+a,
+label,
+button {
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+select {
+  height: 40px;
+  padding: 0 21px 0 3px;
+  border-radius: $border-radius-form;
+  border:1px solid $border-color-form;
+  font-size: 15px;
+
+  &:disabled {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  @media (max-width: $max-width-form) {
+    font-size: 16px;
+  }
+}
+
+.submit,
+input[type="text"],
+input[type="search"],
+input[type="date"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="submit"],
+button,
+textarea {
+  -webkit-appearance: none;
+  appearance: none;
+  display:block;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 40px;
+  padding: 0 0.4em;
+  border-radius: $border-radius-form;
+  border:1px solid $border-color-form;
+  box-sizing:border-box;
+  background: #fff;
+  box-shadow:none;
+  font-size: 16px;
+
+  @media (max-width: $max-width-form) {
+    font-size: 16px;
+  }
+
+  &:focus{
+    outline: 0;
+  }
+}
+
+input[type="number"] {
+  text-align: right;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+
+button {
+  padding: 0 0.6em;
+  font-size: 100%;
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  padding: 0.4em;
+
+  @media (max-width: $max-width-form) {
+    height: 150px;
+    font-size: 16px;
+  }
+}
+
+input,
+textarea,
+select,
+button {
+  &:disabled {
+    opacity: 0.7;
+    color: #999;
+  }
+}
+
+/*
+フォーカス時にプレイスホルダーの文字列を非表示にするCSS　
+ただし、バーまで非表示になるので、この処理はNG
+JSで処理するのが適切のため、setPlacehoder.js を別途用意した
+
+input:focus:placeholder-shown {
+  color: transparent;
+}
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+input:focus::-moz-placeholder {
+  color: transparent;
+}
+input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+input:focus::-ms-input-placeholder {
+  color: transparent;
+}
+*/
+
+::placeholder {
+  color: #ccc;
+}
+
+table{
+  border: none;
+  border-collapse: collapse;
+}
+
+/**
+ * iPhone、AndroidのモバイルWebでの長押しアクションを無効化する
+ * http://paranishian.hateblo.jp/entry/css/mobileweb
+ */
+body, a {
+
+  // リンク長押しのポップアップを無効化
+  -webkit-touch-callout:none;
+}
+
+a {
+
+  // テキスト長押しの選択ボックスを無効化
+  -webkit-user-select:none;
+}
