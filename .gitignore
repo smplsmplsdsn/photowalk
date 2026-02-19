@@ -1,2 +1,4 @@
 build/dist/
 www/index-check.php
+www/assets/photos/
+www/functions/config.php

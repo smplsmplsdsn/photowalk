@@ -219,11 +219,11 @@ table{
 body, a {
 
   // リンク長押しのポップアップを無効化
-  -webkit-touch-callout:none;
+  -webkit-touch-callout: none;
 }
 
 a {
 
   // テキスト長押しの選択ボックスを無効化
-  -webkit-user-select:none;
+  -webkit-user-select: none;
 }
