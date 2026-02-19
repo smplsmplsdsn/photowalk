@@ -1,0 +1,45 @@
+.account[data-flow="1"] {
+  hgroup {
+    margin: 0 0 10px;
+    line-height: 1.5;
+
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+  }
+
+  .account-excerpt {
+    max-width: 500px;
+    margin: 0 0 10px;
+    line-height: 1.5;
+
+    p + p {
+      margin-top: 10px;
+    }
+  }
+}
+
+.account[data-flow="2-1"] {
+  p {
+    line-height: 1.5;
+  }
+
+  p + p {
+    margin: 10px 0 0;
+  }
+
+  strong {
+    display: inline-block;
+    padding: 10px;
+    background: #fafbf5;
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: normal;
+  }
+}

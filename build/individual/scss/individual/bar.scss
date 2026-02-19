@@ -1,0 +1,65 @@
+.bar {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: $var-size;
+  padding: 0 10px;
+  box-sizing: border-box;
+
+  &--top {
+    top: 0;
+    justify-content: space-between;
+  }
+
+  &--bottom-confirm {
+    justify-content: flex-end;
+    bottom: 0;
+  }
+
+  &--bottom-submit {
+    justify-content: space-between;
+    bottom: 0;
+  }
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 44px;
+    height: $var-size - 20px;
+    border: none;
+    background: transparent;
+  }
+
+  > div {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+.photos[data-type="confirm"] .bar.bar--bottom-submit,
+.photos[data-type="submit"] .bar.bar--bottom-confirm {
+  display: none;
+}
+
+.photos[data-bg="white"] .bar {
+  background: #000;
+  color: #eee;
+
+  button {
+    color: #fff;
+  }
+}
+.photos[data-bg="black"] .bar {
+  background: #fff;
+  color: $color-default;
+
+  button {
+    color: #333;
+  }
+}

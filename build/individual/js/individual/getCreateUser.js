@@ -1,0 +1,10 @@
+/**
+ * イベント情報を取得する
+ */
+const getCreateUser = () => {
+  return $.ajax({
+    url: './assets/api/create_user.php',
+    method: 'GET',
+    dataType: 'json',
+  })
+}

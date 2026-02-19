@@ -1,0 +1,129 @@
+.photos {
+  &[data-bg="white"] {
+    background: #fff;
+
+  }
+
+  &[data-bg="black"] {
+    background: #000;
+  }
+
+  &[data-type="submit"] {
+    li {
+      display: none;
+
+      &.selected,
+      &.temp {
+        display: block;
+      }
+
+      &.temp {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  &[data-bg="white"] .photos-list li {
+    background: rgba(0,0,0,0.02);
+  }
+
+  &[data-bg="black"] .photos-list li {
+    background: rgba(255,255,255,0.05);
+  }
+}
+
+.photos-inner {
+  min-height: 100vh;
+}
+
+.photos-list-excerpt {
+  padding: 20px;
+  text-align: center;
+}
+
+.photos-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 10px;
+  list-style: none;
+
+
+  &[data-layout="column"] {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+    @include mq(760px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    li {
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  &[data-layout="one"] {
+    li {
+      height: calc(100vh - $var-size - $var-size - 20px);
+    }
+  }
+
+  li {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+
+    &.selected::after {
+      content: 'あ';
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #333;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+    }
+  }
+}
+
+.photos-toast {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50% 50% 0 50%;
+  background: #ccc;
+  cursor: pointer;
+
+  transform: rotate(90deg);
+  transform-origin: 100% 100%;
+  transition: 0.35s;
+
+  &.show {
+    transform: rotate(0deg);
+  }
+}
