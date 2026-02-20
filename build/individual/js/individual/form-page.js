@@ -82,6 +82,8 @@ $(() => {
           return false
         }
 
+        Photos.handle = d.uid
+
         $('.js-account-create-number').replaceWith(`
           <p><strong>${d.uid}</strong></p>
           <p><button class="js-account-next" style="width:5em;">OK</button></p>
@@ -168,7 +170,7 @@ $(() => {
     $('.js-page').html(page_photos).hide()
 
     for (i = 0; i < images_rand.length; i++) {
-      html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photos/${Photos.event_name}/${photowalker}/${images_rand[i]}"></li>`
+      html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photos/${Photos.event_name}/${photowalker}/${images_rand[i]}" loading="lazy"></li>`
     }
 
     $('.js-photos-list').html(html_images)
@@ -297,7 +299,11 @@ $(() => {
           return false
         }
 
-        Photos.likes = Photos.likes.filter(item => item.photowalker !== Photos.selected_photowaker)
+        if (Photos.likes) {
+          Photos.likes = Photos.likes.filter(item => item.photowalker !== Photos.selected_photowaker)
+        } else {
+          Photos.likes = []
+        }
 
         for (i = 0; i < param.images.length; i++) {
           Photos.likes.push({
@@ -309,6 +315,7 @@ $(() => {
         $('.js-page').html(page_complete)
       } catch (error) {
         $('.js-page').html(page_error)
+        console.error('error', error)
         return false
       }
     }
