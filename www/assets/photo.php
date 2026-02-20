@@ -4,7 +4,7 @@ session_start();
 // ガード：直URL対策（偽装できるので、簡易版として）
 if (empty($_SERVER['HTTP_REFERER'])) {
   http_response_code(403);
-  exit;
+  exit('Forbidden');
 }
 
 // ガード：セッション対応
