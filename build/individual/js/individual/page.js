@@ -54,7 +54,7 @@ const page_account = `
         <p>Do you have your voting ID?</p>
       </div>
     </div>
-    <div>
+    <div class="flex-button">
       <button type="button" class="js-account-firsttime">
         <span class="ja">はじめて</span>
         <span class="en">First Time</span>
