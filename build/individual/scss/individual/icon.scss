@@ -11,6 +11,10 @@
     .icon-column-inner span {
       background: $color-default;
     }
+    .icon-back span {
+      border-bottom-color: $color-default;
+      border-left-color: $color-default;
+    }
   }
 }
 
@@ -23,8 +27,13 @@
   align-items: center;
 }
 
-.icon-back {
-  font-size: 20px;
+.icon-back span{
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+  rotate: 45deg;
 }
 
 .icon-one span {

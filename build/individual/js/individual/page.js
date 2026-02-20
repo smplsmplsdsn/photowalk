@@ -112,7 +112,7 @@ const page_list = `
 const page_photos = `
 <section class="photos js-photos" data-type="confirm" data-bg="white">
   <nav class="bar bar--top">
-    <button type="button" class="icon-back js-photos-back">«</button>
+    <button type="button" class="icon-back js-photos-back"><span></span></button>
     <div>
       <button type="button" class="icon-column js-photos-layout" data-type="column">
         <span class="icon-column-inner">
