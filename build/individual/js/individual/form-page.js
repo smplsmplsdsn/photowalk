@@ -27,11 +27,18 @@ $(() => {
         Photos.event_name = val
         Photos.photowalkers = d.photowalkers
 
+        Photos.ls.event_name = val
+        Fn.storageLS('photowalk', Photos.ls)
+
         $('.js-page').html(page_account).hide()
         $('.js-account-title').html(d.title)
         $('.js-account-time').html(d.date)
         $('.js-account-excerpt').html(d.excerpt)
         $('.js-page').show()
+
+        if (Photos.ls.uid) {
+          $('.js-form-account input[name="display_name"]').val(Photos.ls.uid)
+        }
       } catch (error) {
         $('.js-page').html(page_error)
         return false
@@ -83,6 +90,9 @@ $(() => {
         }
 
         Photos.handle = d.uid
+
+        Photos.ls.uid = d.uid
+        Fn.storageLS('photowalk', Photos.ls)
 
         $('.js-account-create-number').replaceWith(`
           <p><strong>${d.uid}</strong></p>
