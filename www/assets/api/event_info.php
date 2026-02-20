@@ -22,6 +22,16 @@ if (!$event_name) {
   exit;
 }
 
+// ガード（パストラバーサル防止）
+if (!preg_match('/^[a-zA-Z0-9_-]+$/', $event_name)) {
+  echo json_encode([
+    'status' => 'error',
+    'message' => '<span class="ja">投票できるイベントIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>'
+  ]);
+  exit;
+}
+
+
 $base_path = __DIR__ . '/../photos/' . $event_name;
 
 if (!is_dir($base_path)) {
