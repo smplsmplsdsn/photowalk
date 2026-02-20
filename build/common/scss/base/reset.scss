@@ -1,6 +1,7 @@
 $max-width-form: 400px;
 $border-radius-form: 4px;
 $border-color-form: #ccc;
+$color-default: #111;
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -157,6 +158,7 @@ input[type="submit"] {
 
 button {
   padding: 0 0.6em;
+  color: $color-default;
   font-size: 100%;
 }
 
