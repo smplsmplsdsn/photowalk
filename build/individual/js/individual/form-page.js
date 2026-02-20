@@ -199,6 +199,8 @@ $(() => {
           $(`.js-photos-list li[data-filename="${d.filename}"]`).addClass('selected')
         }
       }
+
+      $('.js-photos-selected-num').html($(`.js-photos-list li.selected`).length)
     }
 
     if ($('.js-photos-list li.selected').length === 0) {
