@@ -109,10 +109,12 @@ $(() => {
   })
 
   Photos.showList = () => {
-    const photowalkers = Fn.shuffle(Photos.photowalkers)
+    const photowalkers = (Photos.is_list_fixed)? Photos.photowalkers : Fn.shuffle(Photos.photowalkers, true)
     let html_photowalkers_list = ``,
         i,
         key
+
+    Photos.is_list_fixed = false
 
     $('.js-page').html(page_list).hide()
 
@@ -353,6 +355,7 @@ $(() => {
 
     switch (type) {
       case 'confirm':
+        Photos.is_list_fixed = true
         Photos.showList()
         break
       case 'submit':

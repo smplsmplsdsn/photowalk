@@ -2,12 +2,13 @@
  * 配列をシャッフルする
  *
  * @param {array} array
+ * @param {boolean} is_replace
  * @returns
  */
-Fn.shuffle = (array = []) => {
+Fn.shuffle = (array = [], is_replace) => {
 
-  // 元の配列を壊さないようコピー
-  const ary = [...array]
+  // 元の配列を差し替えるか判別する
+  const ary = (is_replace) ? array : [...array]
 
   let i,
       j;
