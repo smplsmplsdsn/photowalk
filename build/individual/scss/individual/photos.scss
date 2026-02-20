@@ -15,7 +15,7 @@
   }
 
   &[data-type="submit"] {
-    .photos-list-excerpt[data-type="confirm"] {
+    .photos-list-excerpt:not(.show) {
       display: none;
     }
 

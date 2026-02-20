@@ -217,6 +217,7 @@ $(() => {
     Photos.selected_photowaker = photowalker
 
     if (Photos.likes && Photos.likes[photowalker]) {
+
       for (i = 0; i < Photos.likes[photowalker].length; i++) {
         $(`.js-photos-list li[data-filename="${Photos.likes[photowalker][i]}"]`).addClass('selected')
       }
@@ -282,6 +283,12 @@ $(() => {
     // ガード
     if ($('.js-photos-list li.selected').length === 0) {
       return false
+    }
+
+    if ($('.js-photos-list li.selected').length > 5) {
+      $('.js-photos-list-excerpt').addClass('show')
+    } else {
+      $('.js-photos-list-excerpt').removeClass('show')
     }
 
     $('.js-photos-list li.temp').removeClass('temp')
