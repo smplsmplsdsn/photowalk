@@ -103,11 +103,30 @@ const page_list = `
 const page_photos = `
 <section class="photos js-photos" data-type="confirm" data-bg="white">
   <nav class="bar bar--top">
-    <button type="button" class="icon-back js-photos-back">a</button>
+    <button type="button" class="icon-back js-photos-back">«</button>
     <div>
-      <button type="button" class="icon-column js-photos-layout" data-type="column">b</button>
-      <button type="button" class="icon-one js-photos-layout" data-type="one">c</button>
-      <button type="button" class="icon-back js-photos-bg">d</button>
+      <button type="button" class="icon-column js-photos-layout" data-type="column">
+        <span class="icon-column-inner">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+      <button type="button" class="icon-one js-photos-layout" data-type="one">
+        <span></span>
+      </button>
+      <button type="button" class="icon-bg js-photos-bg">
+        <span class="icon-bg-inner">
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </div>
   </nav>
   <div class="photos-inner">
