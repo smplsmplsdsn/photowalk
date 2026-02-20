@@ -1,18 +1,16 @@
 <?php
 session_start();
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// 直URLを防ぐ（偽装できるので、簡易版として）
+// ガード：直URL対策（偽装できるので、簡易版として）
 if (empty($_SERVER['HTTP_REFERER'])) {
   http_response_code(403);
   exit;
 }
 
+// ガード：セッション対応
 if (empty($_SESSION['csrf_token'])) {
   http_response_code(403);
-  exit('Forbidden');
+  exit;
 }
 
 $file = $_GET['filename'] ?? '';
