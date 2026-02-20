@@ -158,6 +158,9 @@ $(() => {
         Photos.handle = d.user.handle
         Photos.likes = d.likes
         Photos.showList()
+
+        Photos.ls.uid = d.user.handle
+        Fn.storageLS('photowalk', Photos.ls)
       } catch (error) {
         $('.js-page').html(page_error)
         return false
