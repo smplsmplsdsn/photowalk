@@ -10,7 +10,7 @@ if (empty($_SERVER['HTTP_REFERER'])) {
 // ガード：セッション対応
 if (empty($_SESSION['csrf_token'])) {
   http_response_code(403);
-  exit;
+  exit('Forbidden');
 }
 
 $file = $_GET['filename'] ?? '';
