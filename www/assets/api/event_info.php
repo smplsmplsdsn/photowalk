@@ -91,5 +91,5 @@ echo json_encode([
   'photowalkers' => $photo_walkers,
   'title' => '<span class="ja">高円寺フォトウォーキング</span><span class="en">Photowalking in Koenji</span>',
   'date' => 'Feb 15, 2026',
-  'excerpt' => '<span class="ja">スピンオフ企画へ参加していただきありがとうございます！</span>',
+  'excerpt' => '<span class="ja">スピンオフ企画へのご参加ありがとうございます！</span>',
 ]);
