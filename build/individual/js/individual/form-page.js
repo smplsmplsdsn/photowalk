@@ -109,22 +109,35 @@ $(() => {
   })
 
   Photos.showList = () => {
+    const photowalkers = Fn.shuffle(Photos.photowalkers)
     let html_photowalkers_list = ``,
-        i
+        i,
+        key
 
     $('.js-page').html(page_list).hide()
 
-    for (i = 0; i < Photos.photowalkers.length; i++) {
-      const d = Photos.photowalkers[i]
+    for (i = 0; i < photowalkers.length; i++) {
+      const d = photowalkers[i]
 
       html_photowalkers_list += `
         <li>
-          <a class="js-link-photowalker" data-name="${d.name}">${d.name}</a>
+          <a class="js-link-photowalker" data-name="${d.name}"><span>${d.name}</span></a>
         </li>
       `
     }
 
     $('.js-photowalkers-list').html(html_photowalkers_list)
+
+    if (Photos.likes) {
+
+      for (key in Photos.likes) {
+        const tgt = $(`.js-link-photowalker[data-name="${key}"]`).closest('li')
+
+        tgt.addClass('selected')
+        $('.js-photowalkers-list').append(tgt)
+      }
+    }
+
     $('.js-page').show()
   }
 
@@ -156,7 +169,18 @@ $(() => {
         }
 
         Photos.handle = d.user.handle
-        Photos.likes = d.likes
+        Photos.likes = []
+
+        d.likes.forEach(item => {
+          const key = item.photowalker
+
+          if (!Photos.likes[key]) {
+            Photos.likes[key] = []
+          }
+
+          Photos.likes[key].push(item.filename)
+        })
+
         Photos.showList()
 
         Photos.ls.uid = d.user.handle
@@ -190,14 +214,9 @@ $(() => {
 
     Photos.selected_photowaker = photowalker
 
-    if (Photos.likes) {
-      for (i = 0; i < Photos.likes.length; i++) {
-        const d = Photos.likes[i]
-
-        if (d.photowalker === photowalker) {
-          console.log(`.js-photos-list li[data-filename="${d.filename}"]`)
-          $(`.js-photos-list li[data-filename="${d.filename}"]`).addClass('selected')
-        }
+    if (Photos.likes && Photos.likes[photowalker]) {
+      for (i = 0; i < Photos.likes[photowalker].length; i++) {
+        $(`.js-photos-list li[data-filename="${Photos.likes[photowalker][i]}"]`).addClass('selected')
       }
 
       $('.js-photos-selected-num').html($(`.js-photos-list li.selected`).length)
@@ -314,18 +333,7 @@ $(() => {
           return false
         }
 
-        if (Photos.likes) {
-          Photos.likes = Photos.likes.filter(item => item.photowalker !== Photos.selected_photowaker)
-        } else {
-          Photos.likes = []
-        }
-
-        for (i = 0; i < param.images.length; i++) {
-          Photos.likes.push({
-            filename: param.images[i],
-            photowalker: Photos.selected_photowaker
-          })
-        }
+        Photos.likes[param.photowalker] = param.images
 
         $('.js-page').html(page_complete)
       } catch (error) {

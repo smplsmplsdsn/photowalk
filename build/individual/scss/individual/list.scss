@@ -2,8 +2,15 @@
   width: 100%;
   max-width: 500px;
 
-  p {
+  h2 {
     margin: 0 0 10px;
+    padding: 0;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 10px 0 0;
     padding: 0 10px;
     font-size: 12px;
     text-align: right;
@@ -26,6 +33,29 @@
 
     &:last-child {
       border-radius: 0 0 5px 5px;
+    }
+
+    span {
+      &::after {
+        content: '投票する';
+        margin: 0 0 0 5px;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+        font-size: 12px;
+      }
+    }
+
+    &.selected span {
+      &::before {
+        content: '⚫︎';
+        margin: 0 5px 0 0;
+        font-size: 12px;
+      }
+      &::after {
+        content: '編集する';
+        color: #bbb;
+      }
     }
   }
 

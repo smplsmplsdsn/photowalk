@@ -92,10 +92,19 @@ const page_account = `
 
 const page_list = `
 <section class="flex-center">
-  <p class="bar2"><a class="bar2-link-back" onclick="location.href='./';">終了する</a></p>
+  <p class="bar2">
+    <a class="bar2-link-back" onclick="location.href='./';">
+      <span class="ja">終了する</span>
+      <span class="en">done</span>
+    </a>
+  </p>
   <div class="list">
-    <p class="ja">敬称略、アルファベット順</p>
+    <h2>
+      <span class="ja">フォトウォーカー</span>
+      <span class="en">Photowalkers</span>
+    </h2>
     <ul class="js-photowalkers-list"></ul>
+    <p class="ja">ランダム未投票順</p>
   </div>
 </section>
 `
@@ -144,7 +153,10 @@ const page_photos = `
       <span class="js-photos-selected-num">0</span> / 5
     </span>
     <form class="js-form-submit">
-      <button type="submit" class="photos-selected js-photos-submit">決定する</button>
+      <button type="submit" class="photos-selected js-photos-submit">
+        <span class="ja">投票する</span>
+        <span class="en">Vote</span>
+      </button>
     </form>
   </nav>
 
