@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/functions/init.php');
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -16,6 +17,9 @@ include_once(__DIR__ . '/functions/init.php');
 <body data-lang="ja">
   <div class="js-page"></div>
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
+  <script>
+    const CSRF_TOKEN = '<?= $_SESSION['csrf_token']; ?>'
+  </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
 </body>
 </html>

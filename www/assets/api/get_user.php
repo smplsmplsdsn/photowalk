@@ -2,6 +2,15 @@
 header('Content-Type: application/json; charset=utf-8');
 include_once(__DIR__ . '/../../functions/init.php');
 
+// ガード（トークンチェック）
+if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+  echo json_encode([
+    'status' => 'fail',
+    'message' => 'token ' . $_SESSION['csrf_token'] . ' ' .$_POST['csrf_token']
+  ]);
+  exit;
+}
+
 $uid = $_POST['uid'] ?? null;
 $event_name = $_POST['event_name'] ?? null;
 $error_message = '<span class="ja">投票できるIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>';
