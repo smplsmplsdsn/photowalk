@@ -68,7 +68,7 @@ const page_account = `
 
   <section class="account js-account" data-flow="2-1" style="display:none;">
     <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
-    <p>あなたの投票IDを作成します。<br>再発行はできませんので、作成後はキャプチャやどこかにメモしておいてくださいね。</p>
+    <p>あなたの投票IDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</p>
     <p>
       <button type="button" class="js-account-create">作成する</button>
     </p>
