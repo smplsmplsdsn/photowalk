@@ -6,6 +6,10 @@
 
   &[data-bg="black"] {
     background: #000;
+
+    .photos-list-excerpt {
+      color: #fff;
+    }
   }
 
   &[data-type="confirm"] {
@@ -49,7 +53,8 @@
 .photos-list-excerpt {
   padding: 20px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .photos[data-type="submit"] .photos-list,
