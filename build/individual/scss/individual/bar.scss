@@ -43,7 +43,8 @@
 }
 
 .photos[data-type="confirm"] .bar.bar--bottom-submit,
-.photos[data-type="submit"] .bar.bar--bottom-confirm {
+.photos[data-type="submit"] .bar.bar--bottom-confirm,
+.photos[data-type="submit"] .bar > div {
   display: none;
 }
 
