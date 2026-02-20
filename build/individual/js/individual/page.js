@@ -139,9 +139,13 @@ const page_photos = `
     </div>
   </nav>
   <div class="photos-inner">
-    <p class="photos-list-excerpt">
-      <span class="ja">「おっ！」となった写真を選んでください。</span>
+    <p class="photos-list-excerpt" data-type="confirm">
+      <span class="ja">まずは「おっ！」となった写真を選んでください。</span>
       <span class="en">Choose the photo that caught your eye.</span>
+    </p>
+    <p class="photos-list-excerpt" data-type="submit">
+      <span class="ja">5枚より多い場合は、5枚まで絞り込んでください。</span>
+      <span class="en">If there are more than five images, please limit them to five.</span>
     </p>
     <ul class="photos-list js-photos-list" data-layout="column" data-bg="white"></ul>
   </div>

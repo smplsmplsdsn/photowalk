@@ -8,7 +8,17 @@
     background: #000;
   }
 
+  &[data-type="confirm"] {
+    .photos-list-excerpt[data-type="submit"] {
+      display: none;
+    }
+  }
+
   &[data-type="submit"] {
+    .photos-list-excerpt[data-type="confirm"] {
+      display: none;
+    }
+
     li {
       display: none;
 
@@ -39,6 +49,7 @@
 .photos-list-excerpt {
   padding: 20px;
   text-align: center;
+  font-size: 14px;
 }
 
 .photos[data-type="submit"] .photos-list,
