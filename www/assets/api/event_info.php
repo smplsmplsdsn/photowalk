@@ -32,7 +32,7 @@ if (!preg_match('/^[a-zA-Z0-9_-]+$/', $event_name)) {
 }
 
 
-$base_path = __DIR__ . '/../photos/' . $event_name;
+$base_path = __DIR__ . '/../../../storage/photos/' . $event_name;
 
 if (!is_dir($base_path)) {
   echo json_encode([
