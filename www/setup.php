@@ -123,20 +123,23 @@ if ($host && $db && $user !== null) {
       </h1>
       <ul>
         <li>
-          <input type="text" name="host" value="<?= h($host); ?>" placeholder="ホスト名">
+          <input type="text" name="host" value="<?= h($host); ?>" placeholder="hostname">
         </li>
         <li>
-          <input type="text" name="db" value="<?= h($db); ?>" placeholder="データベース名">
+          <input type="text" name="db" value="<?= h($db); ?>" placeholder="database">
         </li>
         <li>
-          <input type="text" name="user" value="<?= h($user); ?>" placeholder="ユーザー名">
+          <input type="text" name="user" value="<?= h($user); ?>" placeholder="user">
         </li>
         <li>
-          <input type="text" name="pass" value="<?= h($pass); ?>" placeholder="パスワード">
+          <input type="text" name="pass" value="<?= h($pass); ?>" placeholder="password">
         </li>
       </ul>
       <div>
-        <button type="submit">チェック</button>
+        <button type="submit">
+          <span class="ja">チェック</span>
+          <span class="en" style="display:none;">Check</span>
+        </button>
       </div>
       <?php if (!$is_db_connect && $can_show_error): ?>
         <p>接続できませんでした。</p>
