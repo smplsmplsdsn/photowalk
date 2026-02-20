@@ -1,4 +1,20 @@
 <?php
+$is_https = (
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || $_SERVER['SERVER_PORT'] == 443
+);
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => $is_https,
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
+
+// セキュリティ強化
+ini_set('session.use_strict_mode', 1);
+
 session_start();
 
 // ガード
