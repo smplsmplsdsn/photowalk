@@ -81,7 +81,10 @@ foreach ($results as $row) {
   <section>
     <h2><?= h($photowalker) ?> (<?= $data['total_like'] ?> likes)</h2>
     <table>
-      <?php foreach ($data['items'] as $item): ?>
+      <?php
+        uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
+        foreach ($data['items'] as $item):
+      ?>
         <tr>
           <th><?= $item['like_count'] ?></th>
           <td>
