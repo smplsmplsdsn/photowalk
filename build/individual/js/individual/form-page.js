@@ -264,7 +264,7 @@ $(() => {
 
   // 画像表示レイアウト
   $(document).on('click', '.js-photos-layout', function () {
-    const layout = $(this).attr('data-type')
+    const layout = ($('.js-photos-list').attr('data-layout') === 'one')? 'column' : 'one'
 
     $('.js-photos-list').attr('data-layout', layout)
   })

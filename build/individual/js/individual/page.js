@@ -121,21 +121,23 @@ const page_photos = `
   <nav class="bar bar--top">
     <button type="button" class="icon-back js-photos-back"><span></span></button>
     <div>
-      <button type="button" class="icon-column js-photos-layout" data-type="column">
-        <span class="icon-column-inner">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+      <button type="button" class="js-photos-layout">
+        <span class="icon-column-and-one">
+          <span class="icon-column">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="icon-one">
+            <span></span>
+          </span>
         </span>
-      </button>
-      <button type="button" class="icon-one js-photos-layout" data-type="one">
-        <span></span>
       </button>
       <button type="button" class="icon-bg js-photos-bg">
         <span class="icon-bg-inner">

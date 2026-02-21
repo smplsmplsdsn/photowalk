@@ -1,14 +1,14 @@
 .photos {
   &[data-bg="white"] {
     .icon-one span,
-    .icon-column-inner span {
+    .icon-column span {
       background: #fff;
     }
   }
 
   &[data-bg="black"] {
     .icon-one span,
-    .icon-column-inner span {
+    .icon-column span {
       background: $color-default;
     }
     .icon-back span {
@@ -19,8 +19,6 @@
 }
 
 .icon-back,
-.icon-one,
-.icon-column,
 .icon-bg {
   display: flex;
   justify-content: center;
@@ -34,25 +32,6 @@
   border-bottom: 2px solid #fff;
   border-left: 2px solid #fff;
   rotate: 45deg;
-}
-
-.icon-one span {
-  display: block;
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-}
-
-.icon-column-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2px;
-
-  span {
-    display: block;
-    width: 5px;
-    height: 5px;
-  }
 }
 
 .icon-bg-inner {
@@ -73,5 +52,30 @@
       border: 1px solid #000;
       background: #fff;
     }
+  }
+}
+
+
+.icon-column-and-one {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-one span {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+}
+
+.icon-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+
+  span {
+    display: block;
+    width: 5px;
+    height: 5px;
   }
 }
