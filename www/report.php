@@ -2,7 +2,18 @@
 include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 
-$event_name = $_GET['event_name'] ?? '260215-koenji';
+$event_name = $_GET['event_name'] ?? '';
+
+// ガード
+if ($event_name === '') {
+  exit('NO DATA');
+}
+
+switch ($event_name) {
+  case '260215-koenji-1':
+    exit('Voting in progress');
+}
+
 
 $sql = "
   SELECT
@@ -20,6 +31,10 @@ $stmt->bindValue(':event_name', $event_name, PDO::PARAM_STR);
 $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($results)) {
+  exit('NO DATA');
+}
 
 /*
  * photowalkerごとに配列を再構築
@@ -82,7 +97,7 @@ foreach ($results as $row) {
     foreach ($grouped as $photowalker => $data):
   ?>
   <section>
-    <h2><?= h($photowalker) ?> (<?= $data['total_like'] ?> likes)</h2>
+    <h2><?= h($photowalker) ?> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</h2>
     <table>
       <?php foreach ($data['items'] as $item): ?>
         <tr>
