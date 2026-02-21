@@ -27,7 +27,17 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $grouped = [];
 
 foreach ($results as $row) {
-  $grouped[$row['photowalker']][] = $row;
+  $photowalker = $row['photowalker'];
+
+  if (!isset($grouped[$photowalker])) {
+    $grouped[$photowalker] = [
+      'total_like' => 0,
+      'items' => []
+    ];
+  }
+
+  $grouped[$photowalker]['total_like'] += (int) $row['like_count'];
+  $grouped[$photowalker]['items'][] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -67,11 +77,11 @@ foreach ($results as $row) {
 </head>
 <body data-lang="ja">
   <h1><?= h($event_name) ?></h1>
-  <?php foreach ($grouped as $photowalker => $items): ?>
+  <?php foreach ($grouped as $photowalker => $data): ?>
   <section>
-    <h2><?= h($photowalker) ?></h2>
+    <h2><?= h($photowalker) ?> (<?= $data['total_like'] ?> likes)</h2>
     <table>
-      <?php foreach ($items as $item): ?>
+      <?php foreach ($data['items'] as $item): ?>
         <tr>
           <th><?= $item['like_count'] ?></th>
           <td>
