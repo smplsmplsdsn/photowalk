@@ -68,7 +68,10 @@ const page_account = `
 
   <section class="account js-account" data-flow="2-1" style="display:none;">
     <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
-    <p>あなたの投票IDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</p>
+    <p>
+      <span class="ja">あなたの投票IDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</span>
+      <span class="en">We will create your voting ID.<br>It cannot be reissued, so please take a screenshot or note it down somewhere after it’s created.</span>
+    </p>
     <p>
       <button type="button" class="js-account-create">作成する</button>
     </p>
@@ -77,11 +80,15 @@ const page_account = `
   <section class="account js-account" data-flow="2-2" style="display:none;">
     <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
     <form class="js-form-account">
+      <h2>
+        <span class="ja">投票ID</span>
+        <span class="en">Vote ID</span>
+      </h2>
       <div>
-        <input type="text" name="display_name" value="" placeholder="投票ID">
+        <input type="text" name="display_name" value="">
         <button type="submit">
-          <span class="ja">チェックする</span>
-          <span class="en">Check</span>
+          <span class="ja">写真を見る</span>
+          <span class="en">View Photos</span>
         </button>
       </div>
       <p class="form-error js-form-error" style="visibility:hidden;margin-bottom:10px;">投票IDが一致しません。<br>ID名を確かめてください。</p>
