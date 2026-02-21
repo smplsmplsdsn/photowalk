@@ -19,11 +19,23 @@ const page_error = `
 const page_init = `
 <section class="flex-center">
   <div class="init">
-    <h1>自薦＆他薦で決める一枚</h1>
-    <p class="init-excerpt">「誰が」「どの写真」を選んだか分からないから、完全に自分視点になれるのがイイ！</p>
+    <h1>
+      <span class="ja">自薦＆他薦で決める一枚</span>
+      <span class="en">Chosen — By You, By Them</span>
+    </h1>
+    <div class="init-excerpt">
+      <div class="ja">
+        <p>「誰が」「どの写真」を選んだか分からないから、完全に自分視点になれるのがイイ！</p>
+        <p>さっそくイベントIDを入力してはじめましょう！</p>
+      </div>
+      <div class="en">
+        <p>Because you don’t know who chose which photo, you can fully experience it from your own perspective — and that’s what makes it great!</p>
+        <p>Enter the Event ID and get started right away!</p>
+      </div>
+    </div>
     <form class="js-form-event">
       <div>
-        <input type="text" name="id" value="" placeholder="イベントID">
+        <input type="text" name="id" value="">
         <button type="submit">
           <span class="ja">スタート</span>
           <span class="en">START</span>
