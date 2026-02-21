@@ -57,8 +57,8 @@ if ($host && $db && $user !== null) {
       include_once($create_table);
       $is_db_connect = true;
 
-      // header('Location: /');
-      // exit;
+      header('Location: /');
+      exit;
     }
   } catch (PDOException $e) {
 

@@ -56,9 +56,10 @@ const page_account = `
       <p class="js-account-time"></p>
     </hgroup>
     <div class="account-excerpt">
-      <p class="js-account-excerpt"></p>
+      <p class="js-account-excerpt" style="margin-bottom:10px;"></p>
+
       <div class="ja">
-        <p>選出方法ですが、自薦＆他薦で選出したいと思います。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
+        <p>選出方法ですが、自薦＆他薦で選出します。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
         <p>投票IDはありますか？</p>
       </div>
       <div class="en">

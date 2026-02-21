@@ -14,7 +14,8 @@ $(() => {
 
     async function ajax() {
       try {
-        const d = await getEventInfoWithImages(val)
+        const d = await getEventInfoWithImages(val),
+              params = new URLSearchParams(window.location.search)
 
         // ガード
         if (d.status != 'success') {
@@ -29,6 +30,10 @@ $(() => {
 
         Photos.ls.event_name = val
         Fn.storageLS('photowalk', Photos.ls)
+
+        // GETパラメータの値を変更してスタートした場合にURLを置き換える
+        params.set("event_name", val)
+        history.replaceState(null, "", "?" + params.toString())
 
         $('.js-page').html(page_account).hide()
         $('.js-account-title').html(d.title)

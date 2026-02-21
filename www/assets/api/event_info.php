@@ -6,7 +6,7 @@ include_once(__DIR__ . '/../../functions/init.php');
 if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
   echo json_encode([
     'status' => 'fail',
-    'message' => 'token ' . $_SESSION['csrf_token'] . ' ' .$_POST['csrf_token']
+    'message' => 'token error'
   ]);
   exit;
 }
@@ -85,11 +85,45 @@ foreach ($sub_dirs as $dir) {
   }
 }
 
+try {
+  $sql = "SELECT * FROM event_info WHERE event_name = :event_name LIMIT 1";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([':event_name' => $event_name]);
+
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if (!$row) {
+    echo json_encode([
+      'status' => 'fail',
+      'message' => '<span class="ja">このイベント情報はありません。</span><span class="en">No information is available for this event.</span>'
+    ]);
+    exit;
+  }
+
+  $vote_dt = new DateTime($row['vote_counting_at']);
+  $now = new DateTime();
+
+  if ($vote_dt < $now) {
+    echo json_encode([
+      'status' => 'fail',
+      'message' => '<span class="ja">このイベントへの投票はすでに終了しています。</span><span class="en">The voting period for this event has ended.</span>'
+    ]);
+    exit;
+  }
+} catch (PDOException $e) {
+  echo json_encode([
+    'status' => 'fail',
+    'message' => 'SYSTEM ERROR',
+    'message_system' => $e->getMessage()
+  ]);
+  exit;
+}
+
 // TODO $event_name をトリガーとした titl, date, excerpt の DB化 開票日も追加して、report.php で活用する
 echo json_encode([
   'status' => 'success',
   'photowalkers' => $photo_walkers,
-  'title' => '<span class="ja">高円寺フォトウォーキング</span><span class="en">Photowalking in Koenji</span>',
-  'date' => 'Feb 15, 2026',
-  'excerpt' => '<span class="ja">スピンオフ企画へのご参加ありがとうございます！</span>',
+  'title' => '<span class="ja">' . $row['title_ja'] . '</span><span class="en">' . $row['title_en'] . '</span>',
+  'date' => date('M d, Y', strtotime($row['event_date'])),
+  'excerpt' => '<span class="ja">' . $row['excerpt_ja'] . '</span><span class="en">' . $row['excerpt_en'] . '</span>',
 ]);
