@@ -1,0 +1,88 @@
+<?php
+include_once(__DIR__ . '/functions/init.php');
+ini_set('display_errors', $is_https ? 0 : 1);
+
+$event_name = $_GET['event_name'] ?? '260215-koenji';
+
+$sql = "
+  SELECT
+    photowalker,
+    filename,
+    COUNT(*) AS like_count
+  FROM likes
+  WHERE event_name = :event_name
+  GROUP BY photowalker, filename
+  ORDER BY photowalker ASC, like_count DESC
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':event_name', $event_name, PDO::PARAM_STR);
+$stmt->execute();
+
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/*
+ * photowalkerごとに配列を再構築
+ */
+$grouped = [];
+
+foreach ($results as $row) {
+  $grouped[$row['photowalker']][] = $row;
+}
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自薦＆他薦で決める一枚 集計</title>
+  <meta name="description" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="/assets/css/common.min.css?<?php echo filemtime('./assets/css/common.min.css'); ?>">
+  <style>
+    body {
+      padding: 30px;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 20px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      vertical-align: middle;
+    }
+
+    img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      background: #eee;
+    }
+  </style>
+</head>
+<body data-lang="ja">
+  <h1><?= h($event_name) ?></h1>
+  <?php foreach ($grouped as $photowalker => $items): ?>
+  <section>
+    <h2><?= h($photowalker) ?></h2>
+    <table>
+      <?php foreach ($items as $item): ?>
+        <tr>
+          <th><?= $item['like_count'] ?></th>
+          <td>
+            <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>">
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </table>
+  </section>
+  <?php endforeach; ?>
+  <script src="/assets/js/jquery-4.0.0.min.js"></script>
+  <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
+</body>
+</html>
