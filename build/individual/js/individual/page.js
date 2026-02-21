@@ -85,12 +85,20 @@ const page_account = `
       <span class="en">We will create your voting ID.<br>It cannot be reissued, so please take a screenshot or note it down somewhere after it’s created.</span>
     </p>
     <p>
-      <button type="button" class="js-account-create">作成する</button>
+      <button type="button" class="js-account-create">
+        <span class="ja">作成する</span>
+        <span class="en">Create</span>
+      </button>
     </p>
   </section>
 
   <section class="account js-account" data-flow="2-2" style="display:none;">
-    <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
+    <p class="bar2">
+      <a class="bar2-link-back js-link-account">
+        <span class="ja">戻る</span>
+        <span class="en">Back</span>
+      </a>
+    </p>
     <form class="js-form-account">
       <h2>
         <span class="ja">投票ID</span>
@@ -114,7 +122,7 @@ const page_list = `
   <p class="bar2">
     <a class="bar2-link-back" onclick="location.href='./';">
       <span class="ja">終了する</span>
-      <span class="en">done</span>
+      <span class="en">Done</span>
     </a>
   </p>
   <div class="list">

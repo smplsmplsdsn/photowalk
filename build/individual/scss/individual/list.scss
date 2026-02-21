@@ -37,7 +37,6 @@
 
     span {
       &::after {
-        content: '見る';
         margin: 0 0 0 5px;
         text-decoration: underline;
         text-decoration-thickness: 1px;
@@ -53,7 +52,6 @@
         font-size: 12px;
       }
       &::after {
-        content: '編集する';
         color: #bbb;
       }
     }
@@ -71,5 +69,25 @@
     padding: 0 60px 0 20px;
     box-sizing: border-box;
     color: $color-default;
+  }
+}
+
+html {
+  &[lang="ja"] {
+    .list li span::after {
+      content: '見る';
+    }
+    .list li.selected span::after {
+      content: '編集する';
+    }
+  }
+
+  &[lang="en"] {
+    .list li span::after {
+      content: 'View';
+    }
+    .list li.selected span::after {
+      content: 'Edit';
+    }
   }
 }

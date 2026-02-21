@@ -1,4 +1,4 @@
-body[data-lang="ja"] .en,
-body[data-lang="en"] .ja {
+html[lang="ja"] .en,
+html[lang="en"] .ja {
   display: none;
 }
