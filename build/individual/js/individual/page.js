@@ -46,11 +46,11 @@ const page_account = `
     <div class="account-excerpt">
       <p class="js-account-excerpt"></p>
       <div class="ja">
-        <p>選出方法ですが、自薦＆他薦で選出したいと思います。<br>フォトウォーカーごとに、「おっ！」となった写真を選んで決めましょう！</p>
+        <p>選出方法ですが、自薦＆他薦で選出したいと思います。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
         <p>投票IDはありますか？</p>
       </div>
       <div class="en">
-        <p>We’ll choose the photos through self and peer nominations.<br>For each photowalker, pick up to five photos that caught your eye and cast your vote!</p>
+        <p>For the selection method, we’ll accept both self-nominations and nominations by others.<br>For each photowalker, choose the photos that really catch your eye (“Wow!” photos) and decide on one photo per person.</p>
         <p>Do you have your voting ID?</p>
       </div>
     </div>
