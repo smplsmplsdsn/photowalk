@@ -14,7 +14,7 @@ $(() => {
 
     async function ajax() {
       try {
-        const d = await getEventInfo(val)
+        const d = await getEventInfoWithImages(val)
 
         // ガード
         if (d.status != 'success') {

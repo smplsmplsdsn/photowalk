@@ -6,7 +6,7 @@ include_once(__DIR__ . '/../../functions/init.php');
 if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
   echo json_encode([
     'status' => 'fail',
-    'message' => 'token ' . $_SESSION['csrf_token'] . ' ' .$_POST['csrf_token']
+    'message' => 'token error'
   ]);
   exit;
 }

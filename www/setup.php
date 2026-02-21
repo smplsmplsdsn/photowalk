@@ -57,8 +57,8 @@ if ($host && $db && $user !== null) {
       include_once($create_table);
       $is_db_connect = true;
 
-      header('Location: /');
-      exit;
+      // header('Location: /');
+      // exit;
     }
   } catch (PDOException $e) {
 
@@ -138,11 +138,14 @@ if ($host && $db && $user !== null) {
       <div>
         <button type="submit">
           <span class="ja">チェック</span>
-          <span class="en" style="display:none;">Check</span>
+          <span class="en">Check</span>
         </button>
       </div>
       <?php if (!$is_db_connect && $can_show_error): ?>
-        <p>接続できませんでした。</p>
+        <p>
+          <span class="ja">接続できませんでした。</span>
+          <span class="en">Failed to connect to the server.</span>
+        </p>
       <?php endif; ?>
     </form>
   </div>

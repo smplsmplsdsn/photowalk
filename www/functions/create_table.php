@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 try {
   $pdo->exec($sql);
 } catch (PDOException $e) {
-  echo "テーブル作成エラー: " . $e->getMessage();
+  echo "テーブル作成エラー： users";
   exit;
 }
 
@@ -43,8 +43,31 @@ CREATE TABLE IF NOT EXISTS likes (
 try {
   $pdo->exec($sql);
 } catch (PDOException $e) {
-  echo "テーブル作成エラー: " . $e->getMessage();
+  echo "テーブル作成エラー： likes";
   exit;
 }
 
+$sql = "
+CREATE TABLE IF NOT EXISTS event_info (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  event_name VARCHAR(255) NOT NULL,
+  title_ja VARCHAR(255) NOT NULL,
+  title_en VARCHAR(255) NULL,
+  excerpt_ja TEXT NULL,
+  excerpt_en TEXT NULL,
+  event_date DATE NOT NULL,
+  vote_counting_at DATETIME NOT NULL,
+  status TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  UNIQUE KEY uq_event_name (event_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+";
+
+try {
+  $pdo->exec($sql);
+} catch (PDOException $e) {
+  echo "テーブル作成エラー： event_info";
+  exit;
+}
 

@@ -5,9 +5,9 @@
  *  getEventInfoWithImages : DB + 画像情報
  *  getEventInfo           : DBのみ
  */
-const getEventInfo = (val = '') => {
+const getEventInfoWithImages = (val = '') => {
   return $.ajax({
-    url: './assets/api/event_info_db_only.php',
+    url: './assets/api/event_info.php',
     method: 'POST',
     dataType: 'json',
     data: {

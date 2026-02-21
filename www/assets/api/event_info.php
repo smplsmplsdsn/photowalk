@@ -85,7 +85,7 @@ foreach ($sub_dirs as $dir) {
   }
 }
 
-// TODO $event_name をトリガーとした titl, date, excerpt の DB化
+// TODO $event_name をトリガーとした titl, date, excerpt の DB化 開票日も追加して、report.php で活用する
 echo json_encode([
   'status' => 'success',
   'photowalkers' => $photo_walkers,

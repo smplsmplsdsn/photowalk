@@ -1,0 +1,125 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+h1 {
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+}
+h1 .ja {
+  display: block;
+  font-size: 20px;
+}
+
+dl {
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+dl > div + div {
+  margin: 15px 0 0;
+}
+
+dt,
+dd {
+  margin: 0;
+  padding: 0;
+}
+
+dt {
+  margin: 0 0 5px;
+  font-weight: bold;
+}
+
+textarea {
+  height: auto;
+}
+
+input[type=text],
+input[type=date],
+input[type=time] {
+  width: 100%;
+}
+
+.message-error,
+.message-success {
+  margin: 0 0 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.message-error {
+  color: #c00;
+}
+
+.message-success {
+  color: #000;
+}
+
+.status_label {
+  display: flex;
+  gap: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 40px;
+
+    input {
+      margin: 0;
+    }
+  }
+}
+
+.sticky {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+@media (min-width: 400px) {
+  form {
+    max-width: 600px;
+  }
+
+  dl {
+    display: table;
+    border-top: 1px solid #ccc;
+  }
+
+  dl > div {
+    display: table-row;
+  }
+
+  dt,
+  dd {
+    display: table-cell;
+    vertical-align: middle;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0 10px 10px;
+  }
+
+  dt {
+    white-space: nowrap;
+  }
+
+  dd {
+    width: 100%;
+  }
+}
