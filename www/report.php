@@ -77,18 +77,18 @@ foreach ($results as $row) {
 </head>
 <body data-lang="ja">
   <h1><?= h($event_name) ?></h1>
-  <?php foreach ($grouped as $photowalker => $data): ?>
+  <?php
+    uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
+    foreach ($grouped as $photowalker => $data):
+  ?>
   <section>
     <h2><?= h($photowalker) ?> (<?= $data['total_like'] ?> likes)</h2>
     <table>
-      <?php
-        uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
-        foreach ($data['items'] as $item):
-      ?>
+      <?php foreach ($data['items'] as $item): ?>
         <tr>
           <th><?= $item['like_count'] ?></th>
           <td>
-            <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>">
+            <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
           </td>
         </tr>
       <?php endforeach; ?>
