@@ -1,19 +1,21 @@
 <?php
 include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
 $event_name = $_GET['event_name'] ?? '';
 
 // ガード
 if ($event_name === '') {
-  exit('NO DATA');
+  $error_message = 'NO DATA';
 }
 
 switch ($event_name) {
-  case '260215-koenji-1':
-    exit('Voting in progress');
+  case '260215-koenji':
+    $error_message = 'Voting in progress';
+    break;
+  // defaultなし
 }
-
 
 $sql = "
   SELECT
@@ -33,7 +35,7 @@ $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (empty($results)) {
-  exit('NO DATA');
+  $error_message = 'NO DATA';
 }
 
 /*
@@ -92,24 +94,28 @@ foreach ($results as $row) {
 </head>
 <body data-lang="ja">
   <h1><?= h($event_name) ?></h1>
-  <?php
-    uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
-    foreach ($grouped as $photowalker => $data):
-  ?>
-  <section>
-    <h2><?= h($photowalker) ?> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</h2>
-    <table>
-      <?php foreach ($data['items'] as $item): ?>
-        <tr>
-          <th><?= $item['like_count'] ?></th>
-          <td>
-            <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
-          </td>
-        </tr>
-      <?php endforeach; ?>
-    </table>
-  </section>
+  <?php if ($error_message != ''): ?>
+    <p><?= $error_message ?></p>
+  <?php else: ?>
+    <?php
+      uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
+      foreach ($grouped as $photowalker => $data):
+    ?>
+    <section>
+      <h2><?= h($photowalker) ?> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</h2>
+      <table>
+        <?php foreach ($data['items'] as $item): ?>
+          <tr>
+            <th><?= $item['like_count'] ?></th>
+            <td>
+              <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+    </section>
   <?php endforeach; ?>
+  <?php endif; ?>
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
 </body>
