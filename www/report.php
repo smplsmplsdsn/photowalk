@@ -27,7 +27,14 @@ if (empty($result)) {
   $now = new DateTime();
 
   if ($vote_dt >= $now) {
-    $error_message = 'Voting in progress';
+    $error_message = '
+      <span class="ja">投票受付中！</span>
+      <span class="en">Voting in progress!</span>
+      <a href="/?event_name=' . $event_name . '">
+        <span class="ja">投票する</span>
+        <span class="en">Vote</span>
+      </a>
+    ';
   }
 
   $event_name_ja = $result['title_ja'];
@@ -116,6 +123,13 @@ if (empty($result)) {
       object-fit: contain;
       background: #eee;
     }
+
+    a {
+      color: #111;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+   }
   </style>
 </head>
 <body data-lang="ja">
