@@ -11,10 +11,10 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
   exit;
 }
 
-$event_name = $_POST['event_name'] ?? null;
+$event_id = $_POST['event_id'] ?? null;
 
 // ガード
-if (!$event_name) {
+if (!$event_id) {
   echo json_encode([
     'status' => 'error',
     'message' => '<span class="ja">投票できるイベントIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>'
@@ -23,9 +23,9 @@ if (!$event_name) {
 }
 
 try {
-  $sql = "SELECT * FROM event_info WHERE event_name = :event_name LIMIT 1";
+  $sql = "SELECT * FROM event_info WHERE event_id = :event_id LIMIT 1";
   $stmt = $pdo->prepare($sql);
-  $stmt->execute([':event_name' => $event_name]);
+  $stmt->execute([':event_id' => $event_id]);
 
   $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

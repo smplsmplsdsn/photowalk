@@ -3,21 +3,21 @@ include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-$event_name = $_GET['event_name'] ?? '';
+$event_id = $_GET['event_name'] ?? '';
 
 // ガード
-if ($event_name === '') {
+if ($event_id === '') {
   $error_message = 'NO DATA';
 }
 
-$sql = "SELECT title_ja, title_en, vote_counting_at FROM event_info WHERE event_name = :event_name LIMIT 1";
+$sql = "SELECT title_ja, title_en, vote_counting_at FROM event_info WHERE event_id = :event_id LIMIT 1";
 $stmt = $pdo->prepare($sql);
-$stmt->execute([':event_name' => $event_name]);
+$stmt->execute([':event_id' => $event_id]);
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $vote_counting_at = '';
-$event_name_ja = $event_name;
-$event_name_en = $event_name;
+$event_name_ja = $event_id;
+$event_name_en = $event_id;
 
 if (empty($result)) {
   $error_message = 'NO DATA';
@@ -30,7 +30,7 @@ if (empty($result)) {
     $error_message = '
       <span class="ja">投票受付中！</span>
       <span class="en">Voting in progress!</span>
-      <a href="/?event_name=' . $event_name . '">
+      <a href="/?event_name=' . $event_id . '">
         <span class="ja">エントリー写真を見る</span>
         <span class="en">View Submitted Photos</span>
       </a>
@@ -46,13 +46,13 @@ if (empty($result)) {
       filename,
       COUNT(*) AS like_count
     FROM likes
-    WHERE event_name = :event_name
+    WHERE event_id = :event_id
     GROUP BY photowalker, filename
     ORDER BY photowalker ASC, like_count DESC
   ";
 
   $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':event_name', $event_name, PDO::PARAM_STR);
+  $stmt->bindValue(':event_id', $event_id, PDO::PARAM_STR);
   $stmt->execute();
 
   $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -156,7 +156,7 @@ if (empty($result)) {
           <tr>
             <th><?= $item['like_count'] ?></th>
             <td>
-              <img src="/assets/photo.php?filename=<?= h($event_name) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
+              <img src="/assets/photo.php?filename=<?= h($event_id) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
             </td>
           </tr>
         <?php endforeach; ?>
@@ -167,7 +167,7 @@ if (empty($result)) {
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const PARAM_EVENT_NAME = '<?= $event_name ?>'
+    const PARAM_EVENT_ID = '<?= $event_id ?>'
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
 

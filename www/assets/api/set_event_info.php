@@ -12,9 +12,9 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
 }
 
 // ガード（イベントネーム:スラッグチェック）
-$event_name = trim($_POST['event_name'] ?? '');
+$event_id = trim($_POST['event_id'] ?? '');
 
-if ($event_name === '') {
+if ($event_id === '') {
   echo json_encode([
     'status' => 'error',
     'message' => '<span class="ja">投票できるイベントIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>'
@@ -76,7 +76,7 @@ $vote_counting_at = $datetime_obj->format('Y-m-d H:i:s');
 try {
   $sql = "
     INSERT INTO event_info (
-      event_name,
+      event_id,
       title_ja,
       title_en,
       excerpt_ja,
@@ -87,7 +87,7 @@ try {
       created_at,
       updated_at
     ) VALUES (
-      :event_name,
+      :event_id,
       :title_ja,
       :title_en,
       :excerpt_ja,
@@ -119,7 +119,7 @@ try {
   $stmt = $pdo->prepare($sql);
 
   $stmt->execute([
-    ':event_name' => $event_name,
+    ':event_id' => $event_id,
     ':title_ja' => $_POST['title_ja'] ?? 'No Title',
     ':title_en' => $_POST['title_en'] ?? 'No Title',
     ':excerpt_ja' => $_POST['excerpt_ja'] ?? '',
@@ -134,7 +134,8 @@ try {
 
   echo json_encode([
     'status' => 'fail',
-    'message' => $message
+    'message' => $message,
+    'meesage_system' => $e->getMessage()
   ]);
   exit;
 }

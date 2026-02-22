@@ -11,7 +11,7 @@ const getEventInfo = (val = '') => {
     method: 'POST',
     dataType: 'json',
     data: {
-      event_name: val,
+      event_id: val,
       csrf_token: CSRF_TOKEN
     }
   })

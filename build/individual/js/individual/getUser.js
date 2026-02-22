@@ -10,7 +10,7 @@ const getUser = (val = '') => {
     dataType: 'json',
     data: {
       uid: val,
-      event_name: Photos.event_name,
+      event_id: Photos.event_id,
       csrf_token: CSRF_TOKEN
     }
   })

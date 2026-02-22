@@ -3,7 +3,7 @@ include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-$event_name = $_GET['event_name'] ?? '';
+$event_id = $_GET['event_name'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -22,7 +22,7 @@ $event_name = $_GET['event_name'] ?? '';
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const PARAM_EVENT_NAME = '<?= $event_name ?>'
+    const PARAM_EVENT_ID = '<?= $event_id ?>'
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
 </body>

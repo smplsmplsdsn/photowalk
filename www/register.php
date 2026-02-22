@@ -3,8 +3,8 @@ include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-$event_name = $_GET['event_name'] ?? '';
-$event_name_temp = $_GET['event_name_temp'] ?? '';
+$event_id = $_GET['event_name'] ?? '';
+$event_id_temp = $_GET['event_id_temp'] ?? '';
 
 $today = date('Y-m-d');
 ?>
@@ -26,16 +26,16 @@ $today = date('Y-m-d');
         <span class="en">Event information</span>
       </h1>
       <dl>
-        <?php if ($event_name === ''): ?>
+        <?php if ($event_id === ''): ?>
           <div>
             <dt>
               <span class="ja">イベントID</span>
               <span class="en">Event ID</span>
             </dt>
-            <dd><input type="text" name="event_name" value="<?= $event_name_temp ?>"></dd>
+            <dd><input type="text" name="event_id" value="<?= $event_id_temp ?>"></dd>
           </div>
         <?php else: ?>
-          <input type="hidden" name="event_name" value="<?= $event_name ?>">
+          <input type="hidden" name="event_id" value="<?= $event_id ?>">
         <?php endif; ?>
 
         <div>
@@ -114,7 +114,7 @@ $today = date('Y-m-d');
         </p>
         <p style="margin:auto;">
           <button type="submit">
-            <?php if ($event_name === ''): ?>
+            <?php if ($event_id === ''): ?>
             <span class="ja">作成する</span>
             <span class="en">Create</span>
             <?php else: ?>
@@ -129,31 +129,31 @@ $today = date('Y-m-d');
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const PARAM_EVENT_NAME = '<?= $event_name ?>'
+    const PARAM_EVENT_ID = '<?= $event_id ?>'
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
   <script>
     $(() => {
 
       // 更新用：デフォルト値をセットする
-      if (PARAM_EVENT_NAME != '') {
+      if (PARAM_EVENT_ID != '') {
 
         async function ajax() {
           $('.js-error').hide()
 
           try {
-            const d = await getEventInfo(PARAM_EVENT_NAME)
+            const d = await getEventInfo(PARAM_EVENT_ID)
 
             // ガード
             if (d.status != 'success') {
-              location.href = './register.php?event_name_temp=' + PARAM_EVENT_NAME
+              location.href = './register.php?event_id_temp=' + PARAM_EVENT_ID
               return false
             }
 
             const data = d.data
             const [date_part, time_part] = data.vote_counting_at.split(' ')
 
-            $('[name="event_name"]').val(data.event_name)
+            $('[name="event_id"]').val(data.event_id)
             $('[name="title_ja"]').val(data.title_ja)
             $('[name="title_en"]').val(data.title_en)
             $('[name="excerpt_ja"]').val(data.excerpt_ja)
@@ -173,10 +173,10 @@ $today = date('Y-m-d');
       // 登録用
       $('.js-form-register').on('submit', () => {
 
-        // 更新時は、event_name の値は変更しないようにする
+        // 更新時は、event_id の値は変更しないようにする
         // NOTICE: FormDataを使うため、disabled は使用してはいけない
-        if (PARAM_EVENT_NAME != '') {
-          $('input[name="event_name"]').val(PARAM_EVENT_NAME)
+        if (PARAM_EVENT_ID != '') {
+          $('input[name="event_id"]').val(PARAM_EVENT_ID)
         }
 
         async function ajax() {
@@ -186,7 +186,7 @@ $today = date('Y-m-d');
             const form = document.querySelector('.js-form-register'),
                   data = new FormData(form)
 
-            data.append('create', (PARAM_EVENT_NAME != '')? 'update' : 'new')
+            data.append('create', (PARAM_EVENT_ID != '')? 'update' : 'new')
 
             const d = await setEventInfo(data)
 
@@ -196,8 +196,8 @@ $today = date('Y-m-d');
               return false
             }
 
-            if (PARAM_EVENT_NAME === '') {
-              location.href = './register.php?event_name=' + $('input[name="event_name"]').val()
+            if (PARAM_EVENT_ID === '') {
+              location.href = './register.php?event_name=' + $('input[name="event_id"]').val()
             } else {
               $('.js-success').html(d.message).show()
             }

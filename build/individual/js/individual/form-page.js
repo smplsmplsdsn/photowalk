@@ -25,14 +25,14 @@ $(() => {
           return false
         }
 
-        Photos.event_name = val
+        Photos.event_id = val
         Photos.photowalkers = d.photowalkers
 
-        Photos.ls.event_name = val
+        Photos.ls.event_id = val
         Fn.storageLS('photowalk', Photos.ls)
 
         // GETパラメータの値を変更してスタートした場合にURLを置き換える
-        params.set("event_name", val)
+        params.set("event_id", val)
         history.replaceState(null, "", "?" + params.toString())
 
         $('.js-page').html(page_account).hide()
@@ -216,7 +216,7 @@ $(() => {
     $('.js-page').html(page_photos).hide()
 
     for (i = 0; i < images_rand.length; i++) {
-      html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photo.php?filename=${Photos.event_name}/${photowalker}/${images_rand[i]}" loading="lazy"></li>`
+      html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photo.php?filename=${Photos.event_id}/${photowalker}/${images_rand[i]}" loading="lazy"></li>`
     }
 
     $('.js-photos-list').html(html_images)
@@ -329,7 +329,7 @@ $(() => {
     async function ajax() {
       const param = {}
 
-      param.event_name = Photos.event_name
+      param.event_id = Photos.event_id
       param.uid = Photos.handle
       param.photowalker = Photos.selected_photowaker
       param.images = []

@@ -12,12 +12,12 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
 }
 
 $uid = $_POST['uid'] ?? null;
-$event_name = $_POST['event_name'] ?? null;
+$event_id = $_POST['event_id'] ?? null;
 $error_message = '<span class="ja">投票できるIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>';
 
 
 // ガード
-if (!$uid || !$event_name) {
+if (!$uid || !$event_id) {
   echo json_encode([
     'status' => 'error',
     'message' => $error_message
@@ -50,11 +50,11 @@ try {
     SELECT filename, photowalker
     FROM likes
     WHERE uid = :uid
-      AND event_name = :event_name
+      AND event_id = :event_id
   ");
   $stmt->execute([
     ':uid' => $uid,
-    ':event_name' => $event_name
+    ':event_id' => $event_id
   ]);
   $likes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {

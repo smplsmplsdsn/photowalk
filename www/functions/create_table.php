@@ -27,13 +27,13 @@ try {
 $sql = "
 CREATE TABLE IF NOT EXISTS likes (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  event_name VARCHAR(100) NOT NULL,
+  event_id VARCHAR(100) NOT NULL,
   uid VARCHAR(50) NOT NULL,
   photowalker VARCHAR(50) NOT NULL,
   filename VARCHAR(255) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY unique_like (event_name, uid, filename),
-  INDEX idx_event (event_name),
+  UNIQUE KEY unique_like (event_id, uid, filename),
+  INDEX idx_event (event_id),
   INDEX idx_uid (uid),
   INDEX idx_photowalker (photowalker),
   INDEX idx_filename (filename)
@@ -50,7 +50,7 @@ try {
 $sql = "
 CREATE TABLE IF NOT EXISTS event_info (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  event_name VARCHAR(255) NOT NULL,
+  event_id VARCHAR(255) NOT NULL,
   title_ja VARCHAR(255) NOT NULL,
   title_en VARCHAR(255) NULL,
   excerpt_ja TEXT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS event_info (
   status TINYINT UNSIGNED NOT NULL DEFAULT 1,
   created_at DATETIME NOT NULL,
   updated_at DATETIME NOT NULL,
-  UNIQUE KEY uq_event_name (event_name)
+  UNIQUE KEY uq_event_id (event_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
