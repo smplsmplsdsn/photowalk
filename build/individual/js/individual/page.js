@@ -52,11 +52,11 @@ const page_account = `
   <section class="account js-account" data-flow="1">
     <p class="bar2"><a class="bar2-link-back" onclick="location.href='./';">終了する</a></p>
     <hgroup>
-      <h2 class="js-account-title"></h2>
+      <h2 class="js-account-title"><span class="ja"></span><span class="en"></span></h2>
       <p class="js-account-time"></p>
     </hgroup>
     <div class="account-excerpt">
-      <p class="js-account-excerpt" style="margin-bottom:10px;"></p>
+      <p class="js-account-excerpt" style="margin-bottom:10px;"><span class="ja"></span><span class="en"></span></p>
 
       <div class="ja">
         <p>選出方法ですが、自薦＆他薦で選出します。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>

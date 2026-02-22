@@ -119,11 +119,12 @@ try {
   exit;
 }
 
-// TODO $event_name をトリガーとした titl, date, excerpt の DB化 開票日も追加して、report.php で活用する
 echo json_encode([
   'status' => 'success',
   'photowalkers' => $photo_walkers,
-  'title' => '<span class="ja">' . $row['title_ja'] . '</span><span class="en">' . $row['title_en'] . '</span>',
+  'title_ja' => $row['title_ja'],
+  'title_en' => $row['title_en'],
+  'excerpt_ja' => $row['excerpt_ja'],
+  'excerpt_en' => $row['excerpt_en'],
   'date' => date('M d, Y', strtotime($row['event_date'])),
-  'excerpt' => '<span class="ja">' . $row['excerpt_ja'] . '</span><span class="en">' . $row['excerpt_en'] . '</span>',
 ]);

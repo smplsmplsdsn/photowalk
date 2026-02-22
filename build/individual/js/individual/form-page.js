@@ -36,9 +36,11 @@ $(() => {
         history.replaceState(null, "", "?" + params.toString())
 
         $('.js-page').html(page_account).hide()
-        $('.js-account-title').html(d.title)
-        $('.js-account-time').html(d.date)
-        $('.js-account-excerpt').html(d.excerpt)
+        $('.js-account-title .ja').text(d.title_ja)
+        $('.js-account-title .en').text(d.title_en)
+        $('.js-account-time').text(d.date)
+        $('.js-account-excerpt .ja').text(d.excerpt_ja)
+        $('.js-account-excerpt .en').text(d.excerpt_en)
         $('.js-page').show()
 
         if (Photos.ls.uid) {

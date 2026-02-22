@@ -10,51 +10,68 @@ if ($event_name === '') {
   $error_message = 'NO DATA';
 }
 
-switch ($event_name) {
-  case '260215-koenji':
-    $error_message = 'Voting in progress';
-    break;
-  // defaultなし
-}
-
-$sql = "
-  SELECT
-    photowalker,
-    filename,
-    COUNT(*) AS like_count
-  FROM likes
-  WHERE event_name = :event_name
-  GROUP BY photowalker, filename
-  ORDER BY photowalker ASC, like_count DESC
-";
-
+$sql = "SELECT title_ja, title_en, vote_counting_at FROM event_info WHERE event_name = :event_name LIMIT 1";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':event_name', $event_name, PDO::PARAM_STR);
-$stmt->execute();
+$stmt->execute([':event_name' => $event_name]);
 
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$vote_counting_at = '';
+$event_name_ja = $event_name;
+$event_name_en = $event_name;
 
-if (empty($results)) {
+if (empty($result)) {
   $error_message = 'NO DATA';
-}
+} else {
+  $vote_counting_at = $result['vote_counting_at'];
+  $vote_dt = new DateTime($vote_counting_at);
+  $now = new DateTime();
 
-/*
- * photowalkerごとに配列を再構築
- */
-$grouped = [];
-
-foreach ($results as $row) {
-  $photowalker = $row['photowalker'];
-
-  if (!isset($grouped[$photowalker])) {
-    $grouped[$photowalker] = [
-      'total_like' => 0,
-      'items' => []
-    ];
+  if ($vote_dt >= $now) {
+    $error_message = 'Voting in progress';
   }
 
-  $grouped[$photowalker]['total_like'] += (int) $row['like_count'];
-  $grouped[$photowalker]['items'][] = $row;
+  $event_name_ja = $result['title_ja'];
+  $event_name_en = $result['title_en'];
+
+  $sql = "
+    SELECT
+      photowalker,
+      filename,
+      COUNT(*) AS like_count
+    FROM likes
+    WHERE event_name = :event_name
+    GROUP BY photowalker, filename
+    ORDER BY photowalker ASC, like_count DESC
+  ";
+
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':event_name', $event_name, PDO::PARAM_STR);
+  $stmt->execute();
+
+  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  if (empty($results)) {
+    $error_message = 'NO DATA';
+  }
+
+  /*
+   * photowalkerごとに配列を再構築
+   */
+  $grouped = [];
+
+  foreach ($results as $row) {
+    $photowalker = $row['photowalker'];
+
+    if (!isset($grouped[$photowalker])) {
+      $grouped[$photowalker] = [
+        'total_like' => 0,
+        'items' => []
+      ];
+    }
+
+    $grouped[$photowalker]['total_like'] += (int) $row['like_count'];
+    $grouped[$photowalker]['items'][] = $row;
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -66,9 +83,17 @@ foreach ($results as $row) {
   <meta name="description" content="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma:wght@400;700&display=swap">
   <link rel="stylesheet" href="/assets/css/common.min.css?<?php echo filemtime('./assets/css/common.min.css'); ?>">
   <style>
+    .countdown {
+      margin: 10px 0 0;
+      font-family: 'Michroma', sans-serif;
+      font-size: 32px;
+      transform: scale(1, 2);
+      transform-origin: 0 0;
+    }
+
     body {
       padding: 30px;
     }
@@ -76,6 +101,7 @@ foreach ($results as $row) {
     h1 {
       margin: 0 0 20px;
       font-size: 20px;
+      line-height: 1.5;
     }
 
     th,
@@ -93,10 +119,18 @@ foreach ($results as $row) {
   </style>
 </head>
 <body data-lang="ja">
-  <h1><?= h($event_name) ?></h1>
-  <?php if ($error_message != ''): ?>
+  <?php if (isset($error_message)): ?>
+    <h1>
+      <span class="ja"><?= h($event_name_ja) ?></span>
+      <span class="en"><?= h($event_name_en) ?></span>
+    </h1>
     <p><?= $error_message ?></p>
+    <div class="countdown js-countdown"></div>
   <?php else: ?>
+    <h1>
+      <span class="ja"><?= h($event_name_ja) ?> 結果発表！</span>
+      <span class="en"><?= h($event_name_en) ?> Results Announcement!</span>
+    </h1>
     <?php
       uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
       foreach ($grouped as $photowalker => $data):
@@ -117,6 +151,31 @@ foreach ($results as $row) {
   <?php endforeach; ?>
   <?php endif; ?>
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
+  <script>
+    const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
+    const PARAM_EVENT_NAME = '<?= $event_name ?>'
+  </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
+
+  <script>
+    const end_datetime = '<?= $vote_counting_at ?>'
+
+    $(()=> {
+      if ($('.js-countdown').length > 0 && end_datetime != '') {
+        const end_timestamp = new Date(end_datetime.replace(' ', 'T')).getTime()
+
+        Fn.doContDown(end_timestamp, $(".js-countdown"), () => {
+          const params = new URLSearchParams(window.location.search)
+
+          if (location.href.indexOf('countdown=done') === -1) {
+            params.set("countdown", 'done')
+            history.replaceState(null, "", "?" + params.toString())
+            location.reload();
+          }
+        })
+      }
+    })
+
+  </script>
 </body>
 </html>
