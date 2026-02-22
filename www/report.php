@@ -84,6 +84,18 @@ if (empty($result)) {
     $grouped[$photowalker]['total_like'] += (int) $row['like_count'];
     $grouped[$photowalker]['items'][] = $row;
   }
+
+  $sql_voters = "
+    SELECT COUNT(DISTINCT uid) AS total_voters
+    FROM likes
+    WHERE event_id = :event_id
+  ";
+
+  $stmt_voters = $pdo->prepare($sql_voters);
+  $stmt_voters->bindValue(':event_id', $event_id, PDO::PARAM_STR);
+  $stmt_voters->execute();
+
+  $total_voters = (int) $stmt_voters->fetchColumn();
 }
 ?>
 <!DOCTYPE html>
@@ -110,10 +122,15 @@ if (empty($result)) {
       padding: 30px;
     }
 
-    h1 {
+    hgroup {
       margin: 0 0 20px;
-      font-size: 20px;
       line-height: 1.5;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
     }
 
     th,
@@ -139,17 +156,25 @@ if (empty($result)) {
 </head>
 <body data-lang="ja">
   <?php if (isset($error_message)): ?>
-    <h1>
-      <span class="ja"><?= h($event_name_ja) ?></span>
-      <span class="en"><?= h($event_name_en) ?></span>
-    </h1>
+    <hgroup>
+      <h1>
+        <span class="ja"><?= h($event_name_ja) ?></span>
+        <span class="en"><?= h($event_name_en) ?></span>
+      </h1>
+    </hgroup>
     <p><?= $error_message ?></p>
     <div class="countdown js-countdown"></div>
   <?php else: ?>
-    <h1>
-      <span class="ja"><?= h($event_name_ja) ?> 結果発表！</span>
-      <span class="en"><?= h($event_name_en) ?> Results Announcement!</span>
-    </h1>
+    <hgroup>
+      <h1>
+        <span class="ja"><?= h($event_name_ja) ?> 結果発表！</span>
+        <span class="en"><?= h($event_name_en) ?> Results Announcement!</span>
+      </h1>
+      <p>
+        <span class="ja">投票 <?= $total_voters ?>ユーザー</span>
+        <span class="en"><?= $total_voters ?>voters</span>
+      </p>
+    </hgroup>
     <?php
       uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
       foreach ($grouped as $photowalker => $data):
