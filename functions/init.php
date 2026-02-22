@@ -37,7 +37,14 @@ try {
 // サーバーサイドを日本時間にする
 date_default_timezone_set('Asia/Tokyo');
 
-// お手製のPHPファイルを読み込む
+// お手製のPHPファイルを読み込む（共通）
+foreach (glob(__DIR__ . '/common/{*.php}', GLOB_BRACE) as $file) {
+  if (is_file($file)) {
+    include_once($file);
+  }
+}
+
+// お手製のPHPファイルを読み込む（プロジェクト専用）
 foreach (glob(__DIR__ . '/original/{*.php}', GLOB_BRACE) as $file) {
   if (is_file($file)) {
     include_once($file);

@@ -1,5 +1,5 @@
 build/dist/
 logs/
 www/index-check.php
-www/functions/config.php
+functions/config.php
 storage/photos/

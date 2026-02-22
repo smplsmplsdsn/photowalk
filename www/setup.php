@@ -3,8 +3,8 @@ function h($value) {
   return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }
 
-$config_file = __DIR__ . '/functions/config.php';
-$create_table = __DIR__ . '/functions/create_table.php';
+$config_file = __DIR__ . '/../functions/config.php';
+$create_table = __DIR__ . '/../functions/create_table.php';
 
 $is_db_connect = false;
 $can_show_error = true;
