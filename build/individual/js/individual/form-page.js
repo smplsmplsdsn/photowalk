@@ -178,7 +178,6 @@ $(() => {
         }
 
         Photos.handle = d.user.handle
-        Photos.likes = []
 
         d.likes.forEach(item => {
           const key = item.photowalker

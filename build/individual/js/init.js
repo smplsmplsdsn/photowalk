@@ -1,5 +1,6 @@
 const Photos = {}
 
+Photos.likes = {}
 Photos.ls = Fn.storageLS('photowalk') || {}
 
 $(() => {
