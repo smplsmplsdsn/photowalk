@@ -7,7 +7,7 @@ const page_loading = `
 const page_error = `
 <div class="flex-center">
   <div class="error">
-    <p>
+    <p class="js-error">
       <span class="ja">想定外のエラーが発生しました。<br>時間を置いてもう一度お試しください。</span>
       <span class="en">Something went wrong.<br>Please try again in a little while.</span>
     </p>

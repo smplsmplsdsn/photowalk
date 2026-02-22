@@ -344,7 +344,9 @@ $(() => {
 
         // ガード
         if (d.status != 'success') {
-          $('.js-page').html(page_error)
+          $('.js-page').html(page_error).hide()
+          $('.js-error').html(d.message)
+          $('.js-page').show()
           return false
         }
 

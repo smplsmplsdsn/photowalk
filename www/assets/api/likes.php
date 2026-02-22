@@ -26,6 +26,41 @@ if (!$event_id || !$uid || !$photowalker || !$images) {
   exit;
 }
 
+
+// 投票期間内か確認する
+$stmt = $pdo->prepare("
+  SELECT vote_counting_at
+  FROM event_info
+  WHERE event_id = :event_id
+  LIMIT 1
+");
+
+$stmt->execute([
+  ':event_id' => $event_id
+]);
+
+$vote_counting_at = $stmt->fetchColumn();
+
+if (!$vote_counting_at) {
+  echo json_encode([
+    'status' => 'fail',
+    'message' => 'EVENT NOT FOUND'
+  ]);
+  exit;
+}
+
+$now = new DateTime('now');
+$vote_dt = new DateTime($vote_counting_at);
+
+if ($now >= $vote_dt) {
+  echo json_encode([
+    'status' => 'fail',
+    'message' => '<span class="ja">投票期間は終了しております。</span><span class="en">Voting is now closed.</span>'
+  ]);
+  exit;
+}
+
+
 try {
   $pdo->beginTransaction();
 

@@ -11,7 +11,7 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
   exit;
 }
 
-// ガード（イベントネーム:スラッグチェック）
+// ガード（イベントIDチェック）
 $event_id = trim($_POST['event_id'] ?? '');
 
 if ($event_id === '') {
