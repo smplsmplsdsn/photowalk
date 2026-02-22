@@ -180,7 +180,7 @@ if (empty($result)) {
       foreach ($grouped as $photowalker => $data):
     ?>
     <section>
-      <h2><?= h($photowalker) ?> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</h2>
+      <h2><?= h($photowalker) ?><span style="display:none;"> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</span></h2>
       <table>
         <?php foreach ($data['items'] as $item): ?>
           <tr>
