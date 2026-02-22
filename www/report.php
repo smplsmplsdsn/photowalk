@@ -31,8 +31,8 @@ if (empty($result)) {
       <span class="ja">投票受付中！</span>
       <span class="en">Voting in progress!</span>
       <a href="/?event_name=' . $event_name . '">
-        <span class="ja">投票する</span>
-        <span class="en">Vote</span>
+        <span class="ja">ノミネート写真を見る</span>
+        <span class="en">View Nominated Photos</span>
       </a>
     ';
   }
