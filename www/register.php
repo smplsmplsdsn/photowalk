@@ -3,7 +3,13 @@ include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-$event_id = $_GET['event_name'] ?? '';
+$event_id = $_GET['event_id'] ?? '';
+
+// TODO 2026/2/23以降削除
+if ($event_id == '') {
+  $event_id = $_GET['event_name'] ?? '';
+}
+
 $event_id_temp = $_GET['event_id_temp'] ?? '';
 
 $today = date('Y-m-d');
@@ -197,7 +203,7 @@ $today = date('Y-m-d');
             }
 
             if (PARAM_EVENT_ID === '') {
-              location.href = './register.php?event_name=' + $('input[name="event_id"]').val()
+              location.href = './register.php?event_id=' + $('input[name="event_id"]').val()
             } else {
               $('.js-success').html(d.message).show()
             }

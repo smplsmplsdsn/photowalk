@@ -3,7 +3,12 @@ include_once(__DIR__ . '/functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-$event_id = $_GET['event_name'] ?? '';
+$event_id = $_GET['event_id'] ?? '';
+
+// TODO 2026/2/23以降削除
+if ($event_id == '') {
+  $event_id = $_GET['event_name'] ?? '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
