@@ -123,7 +123,6 @@ if (empty($result)) {
     }
 
     hgroup {
-      margin: 0 0 20px;
       line-height: 1.5;
     }
 
@@ -131,6 +130,10 @@ if (empty($result)) {
       margin: 0;
       padding: 0;
       font-size: 20px;
+    }
+
+    tr[data-count="1"] {
+      display :none;
     }
 
     th,
@@ -151,7 +154,23 @@ if (empty($result)) {
       text-decoration: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 4px;
-   }
+    }
+
+    label {
+      position: sticky;
+      top: 0;
+      left: 0;
+      display: flex;
+      gap: 5px;
+      padding: 20px 0 20px;
+      border-radius: 5px;
+      background: #fff;
+    }
+
+    label input {
+      margin: 0;
+    }
+
   </style>
 </head>
 <body data-lang="ja">
@@ -175,6 +194,13 @@ if (empty($result)) {
         <span class="en"><?= $total_voters ?>voters</span>
       </p>
     </hgroup>
+    <label>
+      <input type="checkbox" name="vote1">
+      <span>
+        <span class="ja">1 を表示する</span>
+        <span class="en">Show 1</span>
+      </span>
+    </label>
     <?php
       uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
       foreach ($grouped as $photowalker => $data):
@@ -183,7 +209,7 @@ if (empty($result)) {
       <h2><?= h($photowalker) ?><span style="display:none;"> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</span></h2>
       <table>
         <?php foreach ($data['items'] as $item): ?>
-          <tr>
+          <tr data-count="<?= $item['like_count'] ?>">
             <th><?= $item['like_count'] ?></th>
             <td>
               <img src="/assets/photo.php?filename=<?= h($event_id) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
@@ -218,6 +244,15 @@ if (empty($result)) {
           }
         })
       }
+
+      $('input[name="vote1"]').on('change', function () {
+
+        if ($(this).prop('checked')) {
+          $(('tr[data-count="1"]')).show()
+        } else {
+          $(('tr[data-count="1"]')).hide()
+        }
+      })
     })
 
   </script>
