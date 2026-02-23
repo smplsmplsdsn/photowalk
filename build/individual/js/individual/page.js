@@ -60,11 +60,11 @@ const page_account = `
 
       <div class="ja">
         <p>選出方法ですが、自薦＆他薦で選出します。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
-        <p>投票IDはありますか？</p>
+        <p>ユーザーIDはありますか？</p>
       </div>
       <div class="en">
         <p>For the selection method, we’ll accept both self-nominations and nominations by others.<br>For each photowalker, choose the photos that really catch your eye (“Wow!” photos) and decide on one photo per person.</p>
-        <p>Do you have your voting ID?</p>
+        <p>Do you have your USER ID?</p>
       </div>
     </div>
     <div class="flex-button">
@@ -82,8 +82,8 @@ const page_account = `
   <section class="account js-account" data-flow="2-1" style="display:none;">
     <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
     <p>
-      <span class="ja">あなたの投票IDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</span>
-      <span class="en">We will create your voting ID.<br>It cannot be reissued, so please take a screenshot or note it down somewhere after it’s created.</span>
+      <span class="ja">あなたのユーザーIDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</span>
+      <span class="en">We will create your USER ID.<br>It cannot be reissued, so please take a screenshot or note it down somewhere after it’s created.</span>
     </p>
     <p>
       <button type="button" class="js-account-create">
@@ -102,8 +102,8 @@ const page_account = `
     </p>
     <form class="js-form-account">
       <h2>
-        <span class="ja">投票ID</span>
-        <span class="en">Vote ID</span>
+        <span class="ja">ユーザーID</span>
+        <span class="en">USER ID</span>
       </h2>
       <div>
         <input type="text" name="display_name" value="">
@@ -112,7 +112,10 @@ const page_account = `
           <span class="en">View Photos</span>
         </button>
       </div>
-      <p class="form-error js-form-error" style="visibility:hidden;margin-bottom:10px;">投票IDが一致しません。<br>ID名を確かめてください。</p>
+      <p class="form-error js-form-error" style="visibility:hidden;margin-bottom:10px;">
+        <span class="ja">ユーザーIDが一致しません。<br>ID名を確かめてください。</span>
+        <span class="en">The USER ID does not match. Please check the ID name.</span>
+      </p>
     </form>
   </section>
 </section>
