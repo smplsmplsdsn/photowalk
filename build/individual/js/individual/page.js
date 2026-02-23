@@ -50,7 +50,12 @@ const page_init = `
 const page_account = `
 <section class="flex-center">
   <section class="account js-account" data-flow="1">
-    <p class="bar2"><a class="bar2-link-back" onclick="location.href='./';">終了する</a></p>
+    <p class="bar2">
+      <a class="bar2-link-back" onclick="location.href='./';">
+        <span class="ja">終了する</span>
+        <span class="en">End</span>
+      </a>
+    </p>
     <hgroup>
       <h2 class="js-account-title"><span class="ja"></span><span class="en"></span></h2>
       <p class="js-account-time"></p>
@@ -80,7 +85,12 @@ const page_account = `
   </section>
 
   <section class="account js-account" data-flow="2-1" style="display:none;">
-    <p class="bar2"><a class="bar2-link-back js-link-account">戻る</a></p>
+    <p class="bar2">
+      <a class="bar2-link-back js-link-account">
+        <span class="ja">戻る</span>
+        <span class="en">Back</span>
+      </a>
+    </p>
     <p>
       <span class="ja">あなたのユーザーIDを作成します。<br>再発行はできませんので、作成後はキャプチャ撮るとかどこかにメモしておいてくださいね。</span>
       <span class="en">We will create your USER ID.<br>It cannot be reissued, so please take a screenshot or note it down somewhere after it’s created.</span>
@@ -126,7 +136,7 @@ const page_list = `
   <p class="bar2">
     <a class="bar2-link-back" onclick="location.href='./';">
       <span class="ja">終了する</span>
-      <span class="en">Done</span>
+      <span class="en">End</span>
     </a>
   </p>
   <div class="list">
@@ -185,7 +195,7 @@ const page_photos = `
   <nav class="bar bar--bottom-confirm">
     <button type="button" class="photos-selected js-photos-selected">
       <span class="ja">選択した画像を確認する »</span>
-      <span class="en">NEXT</span>
+      <span class="en">Check Selected Image(s) »</span>
     </button>
   </nav>
   <nav class="bar bar--bottom-submit">
