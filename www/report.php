@@ -1,7 +1,6 @@
 <?php
 include_once(__DIR__ . '/../functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
 $event_id = $_GET['event_id'] ?? '';
 
@@ -132,7 +131,8 @@ if (empty($result)) {
       font-size: 20px;
     }
 
-    tr[data-count="1"] {
+    tr[data-count="1"],
+    tr[data-count="2"] {
       display :none;
     }
 
@@ -197,8 +197,8 @@ if (empty($result)) {
     <label>
       <input type="checkbox" name="vote1">
       <span>
-        <span class="ja">1 を表示する</span>
-        <span class="en">Show 1</span>
+        <span class="ja">1を2を表示する</span>
+        <span class="en">Show 1 and 2</span>
       </span>
     </label>
     <?php
@@ -249,8 +249,10 @@ if (empty($result)) {
 
         if ($(this).prop('checked')) {
           $(('tr[data-count="1"]')).show()
+          $(('tr[data-count="2"]')).show()
         } else {
           $(('tr[data-count="1"]')).hide()
+          $(('tr[data-count="2"]')).hide()
         }
       })
     })
