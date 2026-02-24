@@ -174,7 +174,7 @@ if (empty($result)) {
 
   </style>
 </head>
-<body data-lang="ja">
+<body>
   <?php if (isset($error_message)): ?>
     <hgroup>
       <h1>

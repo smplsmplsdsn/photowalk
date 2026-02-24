@@ -3,6 +3,10 @@ const Photos = {}
 Photos.likes = {}
 Photos.ls = Fn.storageLS('photowalk') || {}
 
+if (typeof PARAM_EVENT_ID === 'undefined') {
+  PARAM_EVENT_ID = ''
+}
+
 $(() => {
   $('.js-page').html(page_init)
 

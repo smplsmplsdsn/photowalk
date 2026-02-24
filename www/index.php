@@ -17,7 +17,7 @@ $event_id = $_GET['event_id'] ?? '';
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
   <link rel="stylesheet" href="/assets/css/common.min.css?<?php echo filemtime('./assets/css/common.min.css'); ?>">
 </head>
-<body data-lang="ja">
+<body>
   <div class="js-page"></div>
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
