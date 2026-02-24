@@ -198,7 +198,7 @@ if (empty($result)) {
     <label>
       <input type="checkbox" name="vote1">
       <span>
-        <span class="ja">1を2を表示する</span>
+        <span class="ja">1と2を表示する</span>
         <span class="en">Show 1 and 2</span>
       </span>
     </label>
