@@ -1,0 +1,51 @@
+.uploader {
+  max-width: 600px;
+  margin: 40px auto;
+  font-family: sans-serif;
+}
+
+.uploader-droparea {
+  border: 2px dashed #ccc;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.uploader-droparea.is-dragover {
+  background: #f0f8ff;
+  border-color: #007bff;
+}
+
+.uploader-filelist {
+  margin-top: 20px;
+}
+
+.uploader-filecard {
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.uploader-filecardprogress {
+  background: #eee;
+  height: 6px;
+  margin-top: 6px;
+}
+
+.uploader-filecardbar {
+  height: 6px;
+  width: 0%;
+  background: #007bff;
+  transition: width 0.2s;
+}
+
+.uploader-filecardstatus {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.uploader-filecard.is-done {
+  border-color: #4caf50;
+}
