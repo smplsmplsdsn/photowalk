@@ -5,7 +5,7 @@ Fn.uploader = () => {
   }
 
   const STATUS_LABEL = {
-    waiting: '待機中',
+    waiting: 'アップロードボタンのクリック待ち',
     uploading: 'アップロード中',
     done: 'アップロード完了しました',
     error: 'エラーが発生しました'
@@ -16,6 +16,19 @@ Fn.uploader = () => {
     const state = {
       files: [],
       activeCount: 0
+    }
+
+    const checkAllCompleted = () => {
+      const hasUploading = state.files.some(f => f.status === 'uploading')
+      const hasWaiting = state.files.some(f => f.status === 'waiting')
+      const hasDone = state.files.some(f => f.status === 'done')
+
+      if (!hasUploading && !hasWaiting && hasDone) {
+        const message = document.querySelector('.js-message')
+        if (message) {
+          message.textContent = 'アップロードありがとうございます！'
+        }
+      }
     }
 
     const addFiles = (fileList, { autoStart = false } = {}) => {
@@ -35,6 +48,8 @@ Fn.uploader = () => {
       if (autoStart) {
         processQueue()
       }
+
+
     }
 
     const processQueue = () => {
@@ -70,10 +85,6 @@ Fn.uploader = () => {
       })
 
       xhr.addEventListener('load', () => {
-
-        console.log('STATUS:', xhr.status)
-        console.log('RESPONSE:', xhr.responseText)
-
         try {
           const json = JSON.parse(xhr.responseText)
           console.log('JSON:', json)
@@ -90,6 +101,7 @@ Fn.uploader = () => {
         state.activeCount--
         render()
         processQueue()
+        checkAllCompleted()
       })
 
       xhr.addEventListener('error', () => {
