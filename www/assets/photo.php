@@ -7,6 +7,13 @@ if (empty($_SERVER['HTTP_REFERER'])) {
   exit('Forbidden');
 }
 
+// ガード：セッション対応（右クリック画像表示対策、セッションの存在確認のみ）
+if (isset($_SESSION['csrf_token_for_img'])) {
+  unset($_SESSION['csrf_token_for_img']);
+  http_response_code(403);
+  exit('Forbidden');
+}
+
 // ガード：セッション対応
 if (empty($_SESSION['csrf_token'])) {
   http_response_code(403);

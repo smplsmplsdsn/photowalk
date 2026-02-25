@@ -3,6 +3,10 @@ include_once(__DIR__ . '/../functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
+if (isset($_SESSION['csrf_token_for_img'])) {
+  unset($_SESSION['csrf_token_for_img']);
+}
+
 $event_id = $_GET['event_id'] ?? '';
 ?>
 <!DOCTYPE html>

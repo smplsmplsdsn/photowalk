@@ -3,6 +3,10 @@ include_once(__DIR__ . '/../functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
+if (isset($_SESSION['csrf_token_for_img'])) {
+  unset($_SESSION['csrf_token_for_img']);
+}
+
 $event_id = $_GET['event_id'] ?? '';
 
 // TODO 2026/2/23以降削除
@@ -148,6 +152,7 @@ if (empty($result)) {
       height: 160px;
       object-fit: contain;
       background: #eee;
+      pointer-events: none;
     }
 
     a {
@@ -171,7 +176,6 @@ if (empty($result)) {
     label input {
       margin: 0;
     }
-
   </style>
 </head>
 <body>
