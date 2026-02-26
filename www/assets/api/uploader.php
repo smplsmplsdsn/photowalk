@@ -1,40 +1,47 @@
 <?php
 session_start();
 
-$maxSize = 10 * 1024 * 1024;
-$uploadDir = __DIR__ . '/../storage/photos/260215-koenji-selected/';
+header('Content-Type: application/json; charset=utf-8');
 
-// ガード: CSRF検証
-// NOTICE: 画像アップロード時の並列処理を有効にするため、session_write_close() している
+function json_error($error_code, $httpStatus = 400) {
+	http_response_code($httpStatus);
+	echo json_encode([
+		'status' => 'error',
+		'code'   => $error_code
+	]);
+	exit;
+}
+
+$maxSize = 10 * 1024 * 1024;
+$uploadDir = __DIR__ . '/../../../storage/photos/testtesttest/';
+
+// CSRF
 if (
 	!isset($_POST['csrf_token']) ||
+	!isset($_SESSION['csrf_token']) ||
 	!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
 ) {
-	http_response_code(403);
-	exit;
+	json_error('CSRF_INVALID', 403);
 }
+
 session_write_close();
 
-// ガード: method確認
+// method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-	http_response_code(405);
-	exit;
+	json_error('METHOD_NOT_ALLOWED', 405);
 }
 
-// ガード: ファイル存在チェック
+// file exists
 if (!isset($_FILES['image'])) {
-	http_response_code(400);
-	exit;
+	json_error('NO_FILE');
 }
 
-// ガード: アップロードエラーチェック（超重要）
+// upload error
 if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-	http_response_code(400);
-	exit;
+	json_error('UPLOAD_ERROR');
 }
 
-// ガード: MIMEを信用しない
-// NOTICE: 拡張子は信用しない
+// MIME check
 $finfo = new finfo(FILEINFO_MIME_TYPE);
 $mime = $finfo->file($_FILES['image']['tmp_name']);
 
@@ -47,32 +54,27 @@ $allowed = [
 ];
 
 if (!array_key_exists($mime, $allowed)) {
-	http_response_code(400);
-	exit('Invalid type');
+	json_error('INVALID_TYPE');
 }
 
-// ガード: サイズチェック
+// size
 if ($_FILES['image']['size'] > $maxSize) {
-	http_response_code(400);
-	exit('Too large');
+	json_error('FILE_TOO_LARGE');
 }
 
 if (!is_dir($uploadDir)) {
 	mkdir($uploadDir, 0755, true);
 }
 
-// 保存ファイル名
-// NOTICE: ユーザー名は絶対使わない。
 $filename = bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
 $targetPath = $uploadDir . $filename;
 
 if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-  http_response_code(500);
-  exit;
+	json_error('MOVE_FAILED', 500);
 }
 
-// ここから圧縮処理
+// 成功
 echo json_encode([
-  'status' => 'ok',
-  'filename' => $filename
+	'status' => 'success',
+	'filename' => $filename
 ]);

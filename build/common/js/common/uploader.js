@@ -1,14 +1,23 @@
 Fn.uploader = () => {
   const config = {
     concurrency: 3,
-    endpoint: '/upload.php'
+    endpoint: '/assets/api/uploader.php'
   }
 
   const STATUS_LABEL = {
     waiting: 'アップロードボタンのクリック待ち',
     uploading: 'アップロード中',
     done: 'アップロード完了しました',
-    error: 'エラーが発生しました'
+    error: 'エラーが発生しました',
+    403: 'セッションが切れました。再読み込みしてください',
+    413: 'ファイルサイズが大きすぎます',
+    CSRF_INVALID: 'セッションが切れました。再読み込みしてください',
+    METHOD_NOT_ALLOWED: '不正なリクエストです',
+    NO_FILE: 'ファイルが選択されていません',
+    UPLOAD_ERROR: 'アップロードに失敗しました',
+    INVALID_TYPE: '対応していないファイル形式です',
+    FILE_TOO_LARGE: 'ファイルサイズが大きすぎます',
+    MOVE_FAILED: 'サーバーエラーが発生しました'
   }
 
   const Uploader = (() => {
@@ -24,10 +33,10 @@ Fn.uploader = () => {
       const hasDone = state.files.some(f => f.status === 'done')
 
       if (!hasUploading && !hasWaiting && hasDone) {
-        const message = document.querySelector('.js-message')
-        if (message) {
-          message.textContent = 'アップロードありがとうございます！'
-        }
+        // const message = document.querySelector('.js-message')
+        // if (message) {
+        //   message.textContent = 'アップロードありがとうございます！'
+        // }
       }
     }
 
@@ -38,7 +47,8 @@ Fn.uploader = () => {
           id: crypto.randomUUID(),
           file,
           status: 'waiting',
-          progress: 0
+          progress: 0,
+          error_code: ''
         })
       })
 
@@ -84,31 +94,69 @@ Fn.uploader = () => {
         }
       })
 
-      xhr.addEventListener('load', () => {
-        try {
-          const json = JSON.parse(xhr.responseText)
-          console.log('JSON:', json)
-        } catch (e) {
-          console.warn('JSON parse error')
-        }
+      xhr.responseType = 'json'
+      xhr.timeout = 30000
 
-        if (xhr.status === 200) {
-          fileObj.status = 'done'
-        } else {
-          fileObj.status = 'error'
-        }
+      const setError = (error_code) => {
+        fileObj.status = 'error'
+        fileObj.error_code = error_code
+      }
 
+      const finalize = () => {
         state.activeCount--
         render()
         processQueue()
         checkAllCompleted()
+      }
+
+      const handleResult = () => {
+        const res = xhr.response
+        let error_code = null
+
+        // 成功は即終了
+        if (res?.status === 'success') {
+          fileObj.status = 'done'
+          fileObj.error_code = ''
+          finalize()
+          return
+        }
+
+        // JSONエラー優先
+        if (res?.status === 'error') {
+          error_code = res.code || 'アップロードに失敗しました'
+        } else {
+          const message = STATUS_LABEL[xhr.status]
+
+          if (message) {
+            error_code = message
+          } else if (xhr.status >= 400) {
+            error_code = `HTTP Error ${xhr.status}`
+          } else {
+            error_code = '不正なレスポンスです'
+          }
+        }
+
+        if (error_code) {
+          setError(error_code)
+        }
+
+        finalize()
+      }
+
+
+
+      xhr.addEventListener('load', () => {
+        handleResult()
       })
 
       xhr.addEventListener('error', () => {
-        fileObj.status = 'error'
-        state.activeCount--
-        render()
-        processQueue()
+        setError('サーバーに接続できませんでした')
+        finalize()
+      })
+
+      xhr.addEventListener('timeout', () => {
+        setError('通信がタイムアウトしました')
+        finalize()
       })
 
       xhr.open('POST', config.endpoint)
@@ -139,7 +187,9 @@ Fn.uploader = () => {
 
         const status = document.createElement('div')
         status.className = 'uploader-filecardstatus'
-        status.textContent = STATUS_LABEL[fileObj.status] || fileObj.status
+        status.textContent = (fileObj.status === 'error' && fileObj.error_code)
+                              ? STATUS_LABEL[fileObj.error_code]
+                              : STATUS_LABEL[fileObj.status] || fileObj.status
 
         card.appendChild(name)
         card.appendChild(progressWrap)
