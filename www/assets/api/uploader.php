@@ -66,8 +66,10 @@ if (!is_dir($uploadDir)) {
 	mkdir($uploadDir, 0755, true);
 }
 
-$filename = bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
-$targetPath = $uploadDir . $filename;
+do {
+    $filename = bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
+    $targetPath = $uploadDir . $filename;
+} while (file_exists($targetPath));
 
 if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
 	json_error('MOVE_FAILED', 500);
