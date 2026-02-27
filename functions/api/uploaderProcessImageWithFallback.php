@@ -1,5 +1,5 @@
 <?php
-function uploaderProcessImageWithFallback(array $file, array $allowed = [], int $maxSide = 0, int $maxSize = 0): ?string {
+function uploaderProcessImageWithFallback(array $file, array $allowed = [], int $maxSide = 0, int $maxSize = 0) {
 
   if ($file['error'] !== UPLOAD_ERR_OK) {
     return null;
@@ -27,13 +27,31 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
   if (extension_loaded('imagick')) {
     try {
       $img = new Imagick($file['tmp_name']);
+      $img->autoOrient();
+      $img->stripImage();
 
-      // 長辺制限
+      if ($mime === 'image/heic' || $mime === 'image/heif') {
+        $img->setImageBackgroundColor('white');
+        $img = $img->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+        $img->setImageFormat('jpeg');
+        $img->setImageCompressionQuality(100);
+
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $blob = $img->getImagesBlob();
+
+        if ($finfo->buffer($blob) === 'image/jpeg') {
+          $mime = 'image/jpeg';
+        }
+      }
+
       if ($maxSide > 0) {
         $width  = $img->getImageWidth();
         $height = $img->getImageHeight();
         $scale  = min($maxSide / $width, $maxSide / $height, 1);
-        if ($scale < 1) $img->resizeImage((int)($width * $scale), (int)($height * $scale), Imagick::FILTER_LANCZOS, 1);
+
+        if ($scale < 1) {
+          $img->resizeImage((int)($width * $scale), (int)($height * $scale), Imagick::FILTER_LANCZOS, 1);
+        }
       }
 
       $blob = $img->getImagesBlob();
@@ -60,7 +78,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
         $blob = $bestBlob;
       }
 
-      return $blob;
+      return ['blob' => $blob, 'mime' => $mime];
 
     } catch (Exception $e) {
 
@@ -133,7 +151,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
     }
 
     imagedestroy($img);
-    return $blob;
+    return ['blob' => $blob, 'mime' => $mime];
   }
 
   return null;

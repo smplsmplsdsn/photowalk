@@ -1,4 +1,10 @@
-Fn.uploader = () => {
+/**
+ *
+ * @param {object} obj {
+ *  {function} func : アップロード処理が完了した際に実行する
+ * }
+ */
+Fn.uploader = (obj = {}) => {
   const config = {
     concurrency: 3,
     endpoint: '/assets/api/uploader.php',
@@ -52,14 +58,14 @@ Fn.uploader = () => {
 
     // NOTE: すべてのキューが完了した際に何かを表示する場合
     const checkAllCompleted = () => {
-      /*
       const hasUploading = state.files.some(f => f.status === 'uploading'),
             hasWaiting = state.files.some(f => f.status === 'waiting'),
             hasDone = state.files.some(f => f.status === 'done')
 
 
-      if (!hasUploading && !hasWaiting && hasDone) {}
-      */
+      if (!hasUploading && !hasWaiting && hasDone && obj.func) {
+        obj.func()
+      }
     }
 
     const addFiles = (fileList, { autoStart = false } = {}) => {
@@ -144,6 +150,8 @@ Fn.uploader = () => {
 
       formData.append('image', fileObj.file)
       formData.append('csrf_token', CSRF_TOKEN)
+      formData.append('dir1', DIR1)
+
 
       setStatus(fileObj, 'uploading')
       state.activeCount++
