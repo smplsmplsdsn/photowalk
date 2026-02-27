@@ -3,7 +3,7 @@ Fn.uploader = () => {
     concurrency: 3,
     endpoint: '/assets/api/uploader.php',
     fadeout_duration: 400,
-    max_filesize: 5 * 1024 * 1024,
+    max_filesize: -1 * 1024 * 1024,
     allowed_types: [
       'image/jpeg',
       'image/png',
@@ -27,6 +27,7 @@ Fn.uploader = () => {
 
     CSRF_INVALID: 'セッションが切れました。再読み込みしてください',
     METHOD_NOT_ALLOWED: '不正なリクエストです',
+    NO_DIRECTORY: 'アップロード先が不明です',
     NO_FILE: 'ファイルが選択されていません',
     TIMEOUT_ERROR: '通信がタイムアウトしました',
     UPLOAD_ERROR: 'アップロードに失敗しました',
@@ -225,10 +226,10 @@ Fn.uploader = () => {
       }, config.fadeout_duration)
     }
 
-    const getStatusLabel = (f) => {
-      return (f.status === 'error' && f.error_code)
-        ? status_label[f.error_code]
-        : status_label[f.status] || f.status
+    const getStatusLabel = (fileObj) => {
+      return (fileObj.status === 'error' && fileObj.error_code)
+        ? status_label[fileObj.error_code] || fileObj.error_code
+        : status_label[fileObj.status] || fileObj.status
     }
 
     const updateFileCard = (fileObj) => {
@@ -287,6 +288,46 @@ Fn.uploader = () => {
             updateFileCard(fileObj)
             Uploader.processQueue()
           }
+
+          // テスト用: 失敗フラグを送る
+      const originalUploadFile = Uploader.uploadFile
+      Uploader.uploadFile = (f) => {
+        if (f === fileObj && fileObj.retryFail) {
+          const xhr = new XMLHttpRequest()
+          const formData = new FormData()
+          formData.append('image', fileObj.file)
+          formData.append('csrf_token', CSRF_TOKEN)
+          formData.append('fail', '1') // 擬似失敗
+          fileObj.retryFail = false // 1回だけ失敗
+          setStatus(fileObj, 'uploading')
+          state.activeCount++
+          xhr.responseType = 'json'
+          xhr.timeout = 30000
+
+          xhr.addEventListener('load', () => {
+            const res = xhr.response
+            if (res?.status === 'success') setStatus(fileObj, 'done')
+            else setStatus(fileObj, 'error', res?.code || 'UPLOAD_ERROR')
+            state.activeCount--
+            updateButton()
+            Uploader.processQueue()
+          })
+          xhr.addEventListener('error', () => {
+            setStatus(fileObj, 'error', 'SERVER_CONNECT_ERROR')
+            state.activeCount--
+            updateButton()
+            Uploader.processQueue()
+          })
+          xhr.open('POST', config.endpoint)
+          xhr.send(formData)
+        } else {
+          originalUploadFile(f)
+        }
+      }
+
+      // フラグをセットして再試行
+      fileObj.retryFail = true
+      Uploader.processQueue()
         } else {
           action_btn.textContent = config.delete_btn_label
           action_btn.onclick = () => fadeOutAndRemove(fileObj)
