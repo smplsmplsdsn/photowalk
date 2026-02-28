@@ -90,6 +90,8 @@ if (!$processed_result) {
 
 $processed = $processed_result['blob'];
 $mime = $processed_result['mime'];
+$show_at = $processed_result['show_at'];
+$prefix = $show_at->format('YmdHis') . '_';
 
 if ($upload_sub_1 != '') {
 	$upload_dir = $upload_dir . '/' . $upload_sub_1;
@@ -108,8 +110,8 @@ if ($upload_sub_2 != '') {
 }
 
 do {
-    $filename = bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
-    $targetPath = $upload_dir . '/' . $filename;
+	$filename = $prefix . bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
+	$targetPath = $upload_dir . '/' . $filename;
 } while (file_exists($targetPath));
 
 

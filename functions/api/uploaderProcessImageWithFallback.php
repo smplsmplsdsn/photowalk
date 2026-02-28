@@ -19,6 +19,10 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
   $mime  = finfo_file($finfo, $file['tmp_name']);
   finfo_close($finfo);
 
+  $server_timezone = new DateTimeZone(date_default_timezone_get());
+  $utc_timezone    = new DateTimeZone('UTC');
+  $date_now = new DateTime('now', $utc_timezone);
+
   if (!array_key_exists($mime, $allowed)) {
     return null;
   }
@@ -35,17 +39,58 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
       $height = $img->getImageHeight();
 
       if ($width > 12000 || $height > 12000) {
+        $img->clear();
+        $img->destroy();
         return null;
       }
 
       if (($width * $height) > 70_000_000) {
+        $img->clear();
+        $img->destroy();
         return null;
       }
 
       $img->autoOrient();
 
       $icc = $img->getImageProfile('icc');
+
+      $shot_at_raw = null;
+      $shot_at = null;
       $exif = $img->getImageProperties('exif:*');
+
+      if (!empty($exif['exif:DateTimeOriginal'])) {
+        $shot_at_raw = $exif['exif:DateTimeOriginal'];
+      } elseif (!empty($exif['exif:CreateDate'])) {
+        $shot_at_raw = $exif['exif:CreateDate'];
+      } elseif (!empty($exif['exif:DateTime'])) {
+        $shot_at_raw = $exif['exif:DateTime'];
+      }
+
+      if ($shot_at_raw) {
+        $shot_at = DateTime::createFromFormat(
+          'Y:m:d H:i:s',
+          $shot_at_raw,
+          $server_timezone
+        );
+
+        if (!$shot_at) {
+
+          try {
+            $shot_at = new DateTime($shot_at_raw, $server_timezone);
+          } catch (Exception $e) {
+            $shot_at = null;
+          }
+        }
+
+        if ($shot_at) {
+          $shot_at->setTimezone($utc_timezone);
+        }
+      }
+
+      if (!$shot_at) {
+        $shot_at = clone $date_now;
+      }
+
       $img->stripImage();
 
       if ($icc) {
@@ -103,7 +148,14 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
         $blob = $bestBlob;
       }
 
-      return ['blob' => $blob, 'mime' => $mime];
+      $img->clear();
+      $img->destroy();
+
+      return [
+        'blob' => $blob,
+        'mime' => $mime,
+        'show_at' => $shot_at
+      ];
 
     } catch (Exception $e) {
 
@@ -186,7 +238,12 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
     }
 
     imagedestroy($img);
-    return ['blob' => $blob, 'mime' => $mime];
+
+    return [
+      'blob' => $blob,
+      'mime' => $mime,
+      'show_at' => clone $date_now
+    ];
   }
 
   return null;
