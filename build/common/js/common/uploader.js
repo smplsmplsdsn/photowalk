@@ -1,7 +1,7 @@
 /**
  *
  * @param {object} obj {
- *  {function} func : アップロード処理が完了した際に実行する
+ *  {function} func : すべてのキューが完了した際に何かを実行する場合
  * }
  */
 Fn.uploader = (obj = {}) => {
@@ -17,9 +17,12 @@ Fn.uploader = (obj = {}) => {
       'image/webp',
       'image/heic',
       'image/heif'
-    ],
-    delete_btn_label: '削除',
-    retry_btn_label: '再試行'
+    ]
+  }
+
+  const button_label = {
+    delete: '削除',
+    retry: '再試行'
   }
 
   const status_label = {
@@ -47,31 +50,28 @@ Fn.uploader = (obj = {}) => {
   const Uploader = (() => {
     const state = {
       files: [],
-      activeCount: 0
+      active_count: 0
     }
 
-    const setStatus = (fileObj, status, error_code = '') => {
-      fileObj.status = status
-      fileObj.error_code = error_code
-      updateFileCard(fileObj)
+    const setStatus = (file_obj, status, error_code = '') => {
+      file_obj.status = status
+      file_obj.error_code = error_code
+      updateFileCard(file_obj)
     }
 
-    // NOTE: すべてのキューが完了した際に何かを表示する場合
     const checkAllCompleted = () => {
       const hasUploading = state.files.some(f => f.status === 'uploading'),
             hasWaiting = state.files.some(f => f.status === 'waiting'),
             hasDone = state.files.some(f => f.status === 'done')
-
 
       if (!hasUploading && !hasWaiting && hasDone && obj.func) {
         obj.func()
       }
     }
 
-    const addFiles = (fileList, { autoStart = false } = {}) => {
-      Array.from(fileList).forEach(file => {
-
-        const fileObj = {
+    const addFiles = (filelist, { auto_start = false } = {}) => {
+      Array.from(filelist).forEach(file => {
+        const file_obj = {
           id: crypto.randomUUID(),
           file,
           status: 'waiting',
@@ -79,31 +79,14 @@ Fn.uploader = (obj = {}) => {
           error_code: ''
         }
 
-        if (file.size === 0) {
-          fileObj.status = 'error'
-          fileObj.error_code = 'NO_FILE'
-        } else if (config.max_filesize > 0 && file.size > config.max_filesize) {
-          fileObj.status = 'error'
-          fileObj.error_code = 'FILE_TOO_LARGE'
-        } else if (!config.allowed_types.includes(file.type) && !(
-          !file.type.startsWith('image/') &&
-          !file.name.toLowerCase().endsWith('.heic') &&
-          !file.name.toLowerCase().endsWith('.heif')
-        )) {
-          fileObj.status = 'error'
-          fileObj.error_code = 'INVALID_TYPE'
-        } else {
-          fileObj.preview_url = URL.createObjectURL(file)
-        }
-
         switch (true) {
           case (file.size === 0):
-            fileObj.status = 'error'
-            fileObj.error_code = 'NO_FILE'
+            file_obj.status = 'error'
+            file_obj.error_code = 'NO_FILE'
             break
           case (config.max_filesize > 0 && file.size > config.max_filesize):
-            fileObj.status = 'error'
-            fileObj.error_code = 'FILE_TOO_LARGE'
+            file_obj.status = 'error'
+            file_obj.error_code = 'FILE_TOO_LARGE'
             break
           default:
             const filename = file.name.toLowerCase()
@@ -114,53 +97,53 @@ Fn.uploader = (obj = {}) => {
                 filename.endsWith('.heic') ||
                 filename.endsWith('.heif')
             )) {
-              fileObj.status = 'error'
-              fileObj.error_code = 'INVALID_TYPE'
+              file_obj.status = 'error'
+              file_obj.error_code = 'INVALID_TYPE'
             } else {
-              fileObj.preview_url = URL.createObjectURL(file)
+              file_obj.preview_url = URL.createObjectURL(file)
             }
         }
 
-        state.files.push(fileObj)
-        _container.appendChild(createFileCard(fileObj))
+        state.files.push(file_obj)
+        _container.appendChild(createFileCard(file_obj))
       })
 
       updateButton()
 
-      if (autoStart) {
+      if (auto_start) {
         processQueue()
       }
     }
 
     const processQueue = () => {
 
-      while (
-        state.activeCount < config.concurrency
-      ) {
+      while (state.active_count < config.concurrency) {
         const next = state.files.find(f => f.status === 'waiting')
 
-        if (!next) return
+        if (!next) {
+          return
+        }
+
         uploadFile(next)
       }
     }
 
-    const uploadFile = (fileObj) => {
-      const xhr = new XMLHttpRequest()
-      const formData = new FormData()
+    const uploadFile = (file_obj) => {
+      const xhr = new XMLHttpRequest(),
+            form_data = new FormData()
 
-      formData.append('image', fileObj.file)
-      formData.append('csrf_token', CSRF_TOKEN)
-      formData.append('dir1', DIR1)
+      form_data.append('image', file_obj.file)
+      form_data.append('csrf_token', CSRF_TOKEN)
+      form_data.append('dir1', DIR1)
 
-
-      setStatus(fileObj, 'uploading')
-      state.activeCount++
+      setStatus(file_obj, 'uploading')
+      state.active_count++
 
       xhr.upload.addEventListener('progress', e => {
 
         if (e.lengthComputable) {
-          fileObj.progress = Math.round((e.loaded / e.total) * 100)
-          updateFileCard(fileObj)
+          file_obj.progress = Math.min(96, Math.round((e.loaded / e.total) * 100))
+          updateFileCard(file_obj)
         }
       })
 
@@ -168,7 +151,7 @@ Fn.uploader = (obj = {}) => {
       xhr.timeout = 30000
 
       const finalize = () => {
-        state.activeCount--
+        state.active_count--
         updateButton()
         processQueue()
         checkAllCompleted()
@@ -176,17 +159,18 @@ Fn.uploader = (obj = {}) => {
 
       const handleResult = () => {
         const res = xhr.response
+
         let error_code
 
         // NOTE: 成功は即終了
         if (res?.status === 'success') {
-          fileObj.progress = 100
-          setStatus(fileObj, 'done')
+          file_obj.progress = 100
+          setStatus(file_obj, 'done')
           finalize()
           return
         }
 
-        // NOTE; JSONエラー優先
+        // NOTE: JSONエラー優先
         if (res?.status === 'error') {
           error_code = res.code || 'UPLOAD_ERROR'
         } else if (xhr.status >= 400) {
@@ -196,8 +180,8 @@ Fn.uploader = (obj = {}) => {
         }
 
         if (error_code) {
-          fileObj.progress = 0
-          setStatus(fileObj, 'error', error_code)
+          file_obj.progress = 0
+          setStatus(file_obj, 'error', error_code)
         }
 
         finalize()
@@ -208,51 +192,51 @@ Fn.uploader = (obj = {}) => {
       })
 
       xhr.addEventListener('error', () => {
-        setStatus(fileObj, 'error', 'SERVER_CONNECT_ERROR')
+        setStatus(file_obj, 'error', 'SERVER_CONNECT_ERROR')
         finalize()
       })
 
       xhr.addEventListener('timeout', () => {
-        setStatus(fileObj, 'error', 'TIMEOUT_ERROR')
+        setStatus(file_obj, 'error', 'TIMEOUT_ERROR')
         finalize()
       })
 
       xhr.open('POST', config.endpoint)
-      xhr.send(formData)
+      xhr.send(form_data)
     }
 
-    const fadeOutAndRemove = (fileObj) => {
-      fileObj.el.classList.add('is-fadeout')
+    const fadeOutAndRemove = (file_obj) => {
+      file_obj.el.classList.add('is-fadeout')
 
       setTimeout(() => {
 
-        if (fileObj.preview_url) {
-          URL.revokeObjectURL(fileObj.preview_url)
+        if (file_obj.preview_url) {
+          URL.revokeObjectURL(file_obj.preview_url)
         }
-       fileObj.el.remove()
-        state.files = state.files.filter(f => f !== fileObj)
+        file_obj.el.remove()
+        state.files = state.files.filter(f => f !== file_obj)
       }, config.fadeout_duration)
     }
 
-    const getStatusLabel = (fileObj) => {
-      return (fileObj.status === 'error' && fileObj.error_code)
-        ? status_label[fileObj.error_code] || fileObj.error_code
-        : status_label[fileObj.status] || fileObj.status
+    const getStatusLabel = (file_obj) => {
+      return (file_obj.status === 'error' && file_obj.error_code)
+        ? status_label[file_obj.error_code] || file_obj.error_code
+        : status_label[file_obj.status] || file_obj.status
     }
 
-    const updateFileCard = (fileObj) => {
-      fileObj.barEl.style.width = fileObj.progress + '%'
-      fileObj.statusEl.textContent = getStatusLabel(fileObj)
-      fileObj.el.className = `uploader-filecard is-${fileObj.status}`
-      fileObj.updateButton?.()
+    const updateFileCard = (file_obj) => {
+      file_obj.barEl.style.width = file_obj.progress + '%'
+      file_obj.statusEl.textContent = getStatusLabel(file_obj)
+      file_obj.el.className = `uploader-filecard is-${file_obj.status}`
+      file_obj.updateButton?.()
 
-      if (fileObj.status === 'done') {
-        fadeOutAndRemove(fileObj)
+      if (file_obj.status === 'done') {
+        fadeOutAndRemove(file_obj)
       }
     }
 
 
-    const createFileCard = (fileObj) => {
+    const createFileCard = (file_obj) => {
       const card = document.createElement('div'),
             text_wrap = document.createElement('div'),
             name = document.createElement('div'),
@@ -263,7 +247,7 @@ Fn.uploader = (obj = {}) => {
             status = document.createElement('div'),
             action_btn = document.createElement('button')
 
-      card.className = `uploader-filecard is-${fileObj.status}`
+      card.className = `uploader-filecard is-${file_obj.status}`
       text_wrap.className = 'uploader-text'
       name.className = 'uploader-name'
       img_wrap.className = 'uploader-thumbnail'
@@ -272,73 +256,64 @@ Fn.uploader = (obj = {}) => {
       status.className = 'uploader-filecardstatus'
       action_btn.type = 'button'
       action_btn.className = 'uploader-filecardremove'
-      action_btn.textContent = config.delete_btn_label
+      action_btn.textContent = button_label.delete
 
-      name.textContent = fileObj.file.name
-      img.src = fileObj.preview_url
+      name.textContent = file_obj.file.name
+      img.src = file_obj.preview_url
 
       img.onerror = () => {
         img.remove()
 
         img_wrap.classList.add('uploader-nothumbnail')
         img_wrap.onclick = () => {
-          fadeOutAndRemove(fileObj)
+          fadeOutAndRemove(file_obj)
         }
       }
 
       const updateButton = () => {
 
-        if (fileObj.status === 'error') {
-          action_btn.textContent = config.retry_btn_label
+        if (file_obj.status === 'error') {
+          action_btn.textContent = button_label.retry
           action_btn.onclick = () => {
-            fileObj.status = 'waiting'
-            fileObj.error_code = ''
-            updateFileCard(fileObj)
+            file_obj.status = 'waiting'
+            file_obj.error_code = ''
+            updateFileCard(file_obj)
             Uploader.processQueue()
           }
 
-          // テスト用: 失敗フラグを送る
-      const originalUploadFile = Uploader.uploadFile
-      Uploader.uploadFile = (f) => {
-        if (f === fileObj && fileObj.retryFail) {
-          const xhr = new XMLHttpRequest()
-          const formData = new FormData()
-          formData.append('image', fileObj.file)
-          formData.append('csrf_token', CSRF_TOKEN)
-          formData.append('fail', '1') // 擬似失敗
-          fileObj.retryFail = false // 1回だけ失敗
-          setStatus(fileObj, 'uploading')
-          state.activeCount++
-          xhr.responseType = 'json'
-          xhr.timeout = 30000
+          Uploader.uploadFile = (f) => {
+            const xhr = new XMLHttpRequest()
+            const form_data = new FormData()
 
-          xhr.addEventListener('load', () => {
-            const res = xhr.response
-            if (res?.status === 'success') setStatus(fileObj, 'done')
-            else setStatus(fileObj, 'error', res?.code || 'UPLOAD_ERROR')
-            state.activeCount--
-            updateButton()
-            Uploader.processQueue()
-          })
-          xhr.addEventListener('error', () => {
-            setStatus(fileObj, 'error', 'SERVER_CONNECT_ERROR')
-            state.activeCount--
-            updateButton()
-            Uploader.processQueue()
-          })
-          xhr.open('POST', config.endpoint)
-          xhr.send(formData)
-        } else {
-          originalUploadFile(f)
-        }
-      }
+            form_data.append('image', file_obj.file)
+            form_data.append('csrf_token', CSRF_TOKEN)
+            setStatus(file_obj, 'uploading')
+            state.active_count++
 
-      // フラグをセットして再試行
-      fileObj.retryFail = true
-      Uploader.processQueue()
+            xhr.responseType = 'json'
+            xhr.timeout = 30000
+            xhr.addEventListener('load', () => {
+              const res = xhr.response
+              if (res?.status === 'success') setStatus(file_obj, 'done')
+              else setStatus(file_obj, 'error', res?.code || 'UPLOAD_ERROR')
+              state.active_count--
+              updateButton()
+              Uploader.processQueue()
+            })
+            xhr.addEventListener('error', () => {
+              setStatus(file_obj, 'error', 'SERVER_CONNECT_ERROR')
+              state.active_count--
+              updateButton()
+              Uploader.processQueue()
+            })
+            xhr.open('POST', config.endpoint)
+            xhr.send(form_data)
+          }
+
+          Uploader.processQueue()
         } else {
-          action_btn.textContent = config.delete_btn_label
-          action_btn.onclick = () => fadeOutAndRemove(fileObj)
+          action_btn.textContent = button_label.delete
+          action_btn.onclick = () => fadeOutAndRemove(file_obj)
         }
       }
 
@@ -353,12 +328,12 @@ Fn.uploader = (obj = {}) => {
       card.appendChild(text_wrap)
       card.appendChild(action_btn)
 
-      fileObj.el = card
-      fileObj.barEl = bar
-      fileObj.statusEl = status
-      fileObj.updateButton = updateButton
+      file_obj.el = card
+      file_obj.barEl = bar
+      file_obj.statusEl = status
+      file_obj.updateButton = updateButton
 
-      updateFileCard(fileObj)
+      updateFileCard(file_obj)
 
       return card
     }
@@ -373,9 +348,8 @@ Fn.uploader = (obj = {}) => {
     }
   })()
 
-  /* =====================
-    DOM Events
-  ===================== */
+
+  /*  DOM Events */
   const _container = document.querySelector('.js-uploader-filelist'),
         _drop_area = document.querySelector('.js-uploader-droparea'),
         _input = document.querySelector('.js-uploader-input'),
@@ -384,7 +358,7 @@ Fn.uploader = (obj = {}) => {
   _drop_area.addEventListener('click', () => _input.click())
 
   _input.addEventListener('change', e => {
-    Uploader.addFiles(e.target.files, { autoStart: false })
+    Uploader.addFiles(e.target.files, { auto_start: false })
   })
 
   _drop_area.addEventListener('dragover', e => {
@@ -399,7 +373,7 @@ Fn.uploader = (obj = {}) => {
   _drop_area.addEventListener('drop', e => {
     e.preventDefault()
     _drop_area.classList.remove('is-dragover')
-    Uploader.addFiles(e.dataTransfer.files, { autoStart: true })
+    Uploader.addFiles(e.dataTransfer.files, { auto_start: true })
   })
 
   _upload_btn.addEventListener('click', () => {

@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 $upload_dir = $_SESSION['upload_dir'];
-$max_size = intval(0.5 * 1024 * 1024);
+$max_size = intval(0.6 * 1024 * 1024);
 $max_side = 1350;
 $allowed = [
 	'image/jpeg' => 'jpg',
@@ -67,6 +67,11 @@ if (!isset($_FILES['image'])) {
 // upload error
 if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
 	json_error('UPLOAD_ERROR');
+}
+
+// 元サイズ check（サーバー保護）
+if ($_FILES['image']['size'] > 40 * 1024 * 1024) {
+    json_error('FILE_TOO_LARGE');
 }
 
 // MIME check

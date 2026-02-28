@@ -1,5 +1,5 @@
 <?php
-function uploaderProcessImageWithFallback(array $file, array $allowed = [], int $maxSide = 0, int $maxSize = 0) {
+function uploaderProcessImageWithFallback(array $file, array $allowed = [], int $max_side = 0, int $max_size = 0) {
 
   if ($file['error'] !== UPLOAD_ERR_OK) {
     return null;
@@ -26,13 +26,38 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
   // NOTE: Imagick優先
   if (extension_loaded('imagick')) {
     try {
-      $img = new Imagick($file['tmp_name']);
+      $img = new Imagick();
+      $img->setResourceLimit(Imagick::RESOURCETYPE_MEMORY, 256);
+      $img->setResourceLimit(Imagick::RESOURCETYPE_MAP, 256);
+      $img->readImage($file['tmp_name']);
+
+      $width  = $img->getImageWidth();
+      $height = $img->getImageHeight();
+
+      if ($width > 12000 || $height > 12000) {
+        return null;
+      }
+
+      if (($width * $height) > 70_000_000) {
+        return null;
+      }
+
       $img->autoOrient();
+
+      $icc = $img->getImageProfile('icc');
+      $exif = $img->getImageProperties('exif:*');
       $img->stripImage();
+
+      if ($icc) {
+        $img->setImageProfile('icc', $icc);
+      }
 
       if ($mime === 'image/heic' || $mime === 'image/heif') {
         $img->setImageBackgroundColor('white');
-        $img = $img->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+        $tmp = $img->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+        $img->clear();
+        $img->destroy();
+        $img = $tmp;
         $img->setImageFormat('jpeg');
         $img->setImageCompressionQuality(100);
 
@@ -44,10 +69,10 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
         }
       }
 
-      if ($maxSide > 0) {
+      if ($max_side > 0) {
         $width  = $img->getImageWidth();
         $height = $img->getImageHeight();
-        $scale  = min($maxSide / $width, $maxSide / $height, 1);
+        $scale  = min($max_side / $width, $max_side / $height, 1);
 
         if ($scale < 1) {
           $img->resizeImage((int)($width * $scale), (int)($height * $scale), Imagick::FILTER_LANCZOS, 1);
@@ -56,7 +81,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
 
       $blob = $img->getImagesBlob();
 
-      if ($maxSize > 0 && ($mime === 'image/jpeg' || $mime === 'image/webp')) {
+      if ($max_size > 0 && ($mime === 'image/jpeg' || $mime === 'image/webp')) {
         $minQ = 10;
         $maxQ = 100;
         $bestBlob = $blob;
@@ -67,7 +92,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
           $testBlob = $img->getImagesBlob();
           $len = strlen($testBlob);
 
-          if ($len > $maxSize) {
+          if ($len > $max_size) {
             $maxQ = $midQ - 1; // サイズ超過 → 画質下げる
           } else {
             $bestBlob = $testBlob; // 規定内 → 保存
@@ -97,8 +122,18 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
     $width  = imagesx($img);
     $height = imagesy($img);
 
-    if ($maxSide > 0) {
-      $scale = min($maxSide / $width, $maxSide / $height, 1);
+    if ($width > 12000 || $height > 12000) {
+      imagedestroy($img);
+      return null;
+    }
+
+    if (($width * $height) > 70_000_000) {
+      imagedestroy($img);
+      return null;
+    }
+
+    if ($max_side > 0) {
+      $scale = min($max_side / $width, $max_side / $height, 1);
 
       if ($scale < 1) {
         $newW = (int)($width * $scale);
@@ -112,7 +147,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
 
     $blob = null;
 
-    if ($maxSize > 0 && ($mime === 'image/jpeg' || $mime === 'image/webp')) {
+    if ($max_size > 0 && ($mime === 'image/jpeg' || $mime === 'image/webp')) {
       $minQ = 10;
       $maxQ = 100;
       $bestBlob = null;
@@ -131,7 +166,7 @@ function uploaderProcessImageWithFallback(array $file, array $allowed = [], int 
 
         $len = strlen($testBlob);
 
-        if ($len > $maxSize) {
+        if ($len > $max_size) {
           $maxQ = $midQ - 1;
         } else {
           $bestBlob = $testBlob;
