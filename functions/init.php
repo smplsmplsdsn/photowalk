@@ -1,0 +1,52 @@
+<?php
+$is_https = (
+    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || $_SERVER['SERVER_PORT'] == 443
+);
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => $is_https,
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
+
+// セキュリティ強化
+ini_set('session.use_strict_mode', 1);
+
+session_start();
+
+// ガード
+if (!is_file(__DIR__ . '/config.php')) {
+  header('Location: /setup.php');
+  exit;
+}
+
+include_once(__DIR__ . '/config.php');
+
+// データベースに接続する
+try {
+  $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+  echo 'SYSTEM ERROR';
+  exit();
+}
+
+// サーバーサイドを日本時間にする
+date_default_timezone_set('Asia/Tokyo');
+
+// お手製のPHPファイルを読み込む（共通）
+foreach (glob(__DIR__ . '/common/{*.php}', GLOB_BRACE) as $file) {
+  if (is_file($file)) {
+    include_once($file);
+  }
+}
+
+// お手製のPHPファイルを読み込む（プロジェクト専用）
+foreach (glob(__DIR__ . '/original/{*.php}', GLOB_BRACE) as $file) {
+  if (is_file($file)) {
+    include_once($file);
+  }
+}

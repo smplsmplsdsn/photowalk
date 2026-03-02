@@ -1,0 +1,9 @@
+@mixin mq($max: 800px) {
+  @if math.is-unitless($max) {
+    $max: $max * 1px;
+  }
+
+  @media (max-width: $max) {
+    @content;
+  }
+}

@@ -1,0 +1,13 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "メイリオ", Meiryo, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}
+
+// Android で Pull to Refresh を無効にする
+body {
+  overscroll-behavior-y: none;
+}
+
+.nowrap {
+  display: inline-block;
+}

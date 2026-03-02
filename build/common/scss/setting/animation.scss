@@ -1,0 +1,79 @@
+/**
+ * 回転
+ */
+@keyframes keyframes-spin {
+	0% {transform: rotate(0deg);}
+	100% {transform: rotate(360deg);}
+}
+.animation-spin{animation: keyframes-spin 1.5s linear infinite;}
+
+/**
+ * 点滅
+ */
+@keyframes keyframes-blinker {
+  0% {opacity: 1;}
+  50% {opacity: 0.2;}
+  100% {opacity: 1;}
+}
+.animation-blinker{animation: keyframes-blinker 1s infinite;}
+
+/**
+ * ローディングバー
+ */
+@keyframes keyframes-loading {
+  0% {transform: translate3d(-100%,0,0);}
+  50% {transform: translate3d(0,0,0);}
+  100% {transform: translate3d(100%,0,0);}
+}
+.animation-loadingbar{animation: keyframes-loading 2s infinite;}
+
+/**
+ * 拡大して元に戻る
+ */
+@keyframes scale-up-down {
+  0% {transform: scale(1);}
+  65% {transform: scale(1.1);}
+  100% {transform: scale(1);}
+}
+
+@keyframes scale-up-down-02 {
+  0% {transform: scale(1);}
+  55% {transform: scale(1.02);}
+  100% {transform: scale(1);}
+}
+
+/**
+ * 回転しながら消えて元に戻る
+ */
+@keyframes scale-hide-show {
+  0% {transform: scale(1) rotate(0deg);}
+  50% {transform: scale(0) rotate(360deg);}
+  100% {transform: scale(1) rotate(0deg);}
+}
+
+/**
+ * 回転しながら消える
+ */
+ @keyframes spin-hide {
+  0% {transform: scale(1) rotate(0deg);}
+  16%  {transform: scale(1.1) rotate(180deg);}
+  33% {transform: scale(1) rotate(360deg);}
+  66% {transform: scale(0.5) rotate(0deg);}
+  100% {transform: scale(0) rotate(360deg);}
+}
+.animation-shake-horizon {animation: spin-hide 0.65s linear forwards;}
+
+/**
+ * 横にゆれる
+ */
+@keyframes shake-horizon {
+  0% {transform: translateX(0)}
+  15% {transform: translateX(-10px)}
+  30% {transform: translateX(10px)}
+  45% {transform: translateX(-10px)}
+  60% {transform: translateX(10px)}
+  75% {transform: translateX(-10px)}
+  88% {transform: translateX(8px)}
+  100% {transform: translateX(0)}
+}
+.animation-shake-horizon {animation: shake-horizontal 0.65s linear both;}

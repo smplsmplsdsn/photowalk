@@ -1,0 +1,5 @@
+build/dist/
+logs/
+www/index-check.php
+functions/config.php
+storage/photos/
