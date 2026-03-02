@@ -1,0 +1,24 @@
+.bar2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: $var-size;
+  padding: 0 20px;
+}
+
+.bar2-link-back {
+  display: inline-flex;
+  align-items: center;
+  height: 60px;
+  color: $color-default;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+
+  &::before {
+    content: '«';
+  }
+}

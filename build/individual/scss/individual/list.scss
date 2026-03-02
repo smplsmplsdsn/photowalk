@@ -1,0 +1,93 @@
+.list {
+  width: 100%;
+  max-width: 500px;
+
+  h2 {
+    margin: 0 0 10px;
+    padding: 0;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  p {
+    margin: 10px 0 0;
+    padding: 0 10px;
+    font-size: 12px;
+    text-align: right;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    margin: 0;
+    padding: 5px;
+    border: 1px solid $color-default;
+
+    &:first-child {
+      border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 5px 5px;
+    }
+
+    span {
+      &::after {
+        margin: 0 0 0 5px;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+        font-size: 12px;
+      }
+    }
+
+    &.selected span {
+      &::before {
+        content: '⚫︎';
+        margin: 0 5px 0 0;
+        font-size: 12px;
+      }
+      &::after {
+        color: #bbb;
+      }
+    }
+  }
+
+  li + li {
+    border-top: none;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 44px;
+    padding: 0 60px 0 20px;
+    box-sizing: border-box;
+    color: $color-default;
+  }
+}
+
+html {
+  &[lang="ja"] {
+    .list li span::after {
+      content: '見る';
+    }
+    .list li.selected span::after {
+      content: '編集する';
+    }
+  }
+
+  &[lang="en"] {
+    .list li span::after {
+      content: 'View';
+    }
+    .list li.selected span::after {
+      content: 'Edit';
+    }
+  }
+}

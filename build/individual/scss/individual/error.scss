@@ -1,0 +1,14 @@
+.error {
+  line-height: 1.5;
+
+  p + p {
+    margin: 10px 0 0;
+  }
+
+  a {
+    color: $color-default;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+}
