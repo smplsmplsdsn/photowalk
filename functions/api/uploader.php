@@ -20,22 +20,17 @@ $allowed = [
 ];
 $allowed_visibility = ['public', 'private'];
 
+// ディレクトリ
+if (!is_dir($upload_dir)) {
+	json_error('NO_DIR');
+}
 
 // TODO ログイン判定
 if (empty($_SESSION['user_id'])) {
 	json_error('UNAUTHORIZED', 401);
 }
 
-$public_id = $_SESSION['public_id'] ?? '';
-
-if ($public_id !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $public_id)) {
-	json_error('INVALID_DIR');
-}
-
-// ディレクトリ
-if (!is_dir($upload_dir)) {
-	json_error('NO_DIR');
-}
+$user_id = $_SESSION['user_id'] ?? '';
 
 $category = $_POST['category'] ?? '';
 
@@ -93,12 +88,10 @@ $mime = $processed_result['mime'];
 $show_at = $processed_result['show_at'];
 $prefix = $show_at->format('YmdHis') . '_';
 
-if ($public_id != '') {
-	$upload_dir = $upload_dir . '/' . $public_id;
+$upload_dir = $upload_dir . '/' . $user_id;
 
-	if (!is_dir($upload_dir)) {
-		mkdir($upload_dir, 0755, true);
-	}
+if (!is_dir($upload_dir)) {
+	mkdir($upload_dir, 0755, true);
 }
 
 if ($category != '') {
