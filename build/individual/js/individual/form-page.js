@@ -43,8 +43,8 @@ $(() => {
         $('.js-account-excerpt .en').text(d.excerpt_en)
         $('.js-page').show()
 
-        if (Photos.ls.uid) {
-          $('.js-form-account input[name="display_name"]').val(Photos.ls.uid)
+        if (Photos.ls.public_id) {
+          $('.js-form-account input[name="display_name"]').val(Photos.ls.public_id)
         }
       } catch (error) {
         $('.js-page').html(page_error)
@@ -96,13 +96,13 @@ $(() => {
           return false
         }
 
-        Photos.handle = d.uid
+        Photos.handle = d.public_id
 
-        Photos.ls.uid = d.uid
+        Photos.ls.public_id = d.public_id
         Fn.storageLS('photowalk', Photos.ls)
 
         $('.js-account-create-number').replaceWith(`
-          <p><strong>${d.uid}</strong></p>
+          <p><strong>${d.public_id}</strong></p>
           <p><button class="js-account-next" style="width:5em;">OK</button></p>
         `)
         $('.js-account[data-flow="1"]').hide()
@@ -191,7 +191,7 @@ $(() => {
 
         Photos.showList()
 
-        Photos.ls.uid = d.user.handle
+        Photos.ls.public_id = d.user.handle
         Fn.storageLS('photowalk', Photos.ls)
       } catch (error) {
         $('.js-page').html(page_error)
@@ -329,7 +329,7 @@ $(() => {
       const param = {}
 
       param.event_id = Photos.event_id
-      param.uid = Photos.handle
+      param.public_id = Photos.handle
       param.photowalker = Photos.selected_photowaker
       param.images = []
 
@@ -341,6 +341,8 @@ $(() => {
 
       try {
         const d = await setLikes(param)
+
+        console.log(d)
 
         // ガード
         if (d.status != 'success') {

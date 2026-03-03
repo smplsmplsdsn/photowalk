@@ -2,15 +2,12 @@
 include_once(__DIR__ . '/../functions/init.php');
 ini_set('display_errors', $is_https ? 0 : 1);
 
-// ログイン成功したとして
-session_regenerate_id(true);
-$_SESSION['user_id'] = 'login_test';
-
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+// TODO ログイン成功したとして
+// NOTICE: category は POSTで設定する（ユーザー側で変更できないように、constで定義する）
+// session_regenerate_id(true);
 $_SESSION['upload_dir'] = __DIR__ . '/../storage/photos';
-
-// NOTICE: dir2 は POSTで設定する（ユーザー側で変更できないように、constで定義する）
-$_SESSION['dir1'] = 'login_test';
+$_SESSION['public_id'] = 'login_test';
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
 if ($is_https) {
   exit('NOW CLOSED.');
@@ -60,7 +57,7 @@ if ($is_https) {
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const DIR2 = 'koenji2'
+    const CATEGORY = 'koenji3'
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
   <script>

@@ -1,6 +1,12 @@
 <?php
-session_start();
-header('Content-Type: application/json; charset=utf-8');
+function json_error($error_code, $httpStatus = 400) {
+	http_response_code($httpStatus);
+	echo json_encode([
+		'status' => 'error',
+		'code'   => $error_code
+	]);
+	exit;
+}
 
 $upload_dir = $_SESSION['upload_dir'];
 $max_size = intval(0.6 * 1024 * 1024);
@@ -12,19 +18,18 @@ $allowed = [
 	'image/heic' => 'heic',
 	'image/heif' => 'heif'
 ];
+$allowed_visibility = ['public', 'private'];
 
-function json_error($error_code, $httpStatus = 400) {
-	http_response_code($httpStatus);
-	echo json_encode([
-		'status' => 'error',
-		'code'   => $error_code
-	]);
-	exit;
+
+// TODO ログイン判定
+if (empty($_SESSION['user_id'])) {
+	json_error('UNAUTHORIZED', 401);
 }
 
-// ログイン判定
-if (empty($_SESSION['user_id'])) {
-    json_error('UNAUTHORIZED', 401);
+$public_id = $_SESSION['public_id'] ?? '';
+
+if ($public_id !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $public_id)) {
+	json_error('INVALID_DIR');
 }
 
 // ディレクトリ
@@ -32,14 +37,9 @@ if (!is_dir($upload_dir)) {
 	json_error('NO_DIR');
 }
 
-$upload_sub_1 = $_SESSION['dir1'] ?? '';
-$upload_sub_2 = $_POST['dir2'] ?? '';
+$category = $_POST['category'] ?? '';
 
-if ($upload_sub_1 !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $upload_sub_1)) {
-	json_error('INVALID_DIR');
-}
-
-if ($upload_sub_2 !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $upload_sub_2)) {
+if ($category !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $category)) {
 	json_error('INVALID_DIR');
 }
 
@@ -93,16 +93,16 @@ $mime = $processed_result['mime'];
 $show_at = $processed_result['show_at'];
 $prefix = $show_at->format('YmdHis') . '_';
 
-if ($upload_sub_1 != '') {
-	$upload_dir = $upload_dir . '/' . $upload_sub_1;
+if ($public_id != '') {
+	$upload_dir = $upload_dir . '/' . $public_id;
 
 	if (!is_dir($upload_dir)) {
 		mkdir($upload_dir, 0755, true);
 	}
 }
 
-if ($upload_sub_2 != '') {
-	$upload_dir = $upload_dir . '/' . $upload_sub_2;
+if ($category != '') {
+	$upload_dir = $upload_dir . '/' . $category;
 
 	if (!is_dir($upload_dir)) {
 		mkdir($upload_dir, 0755, true);
@@ -111,12 +111,51 @@ if ($upload_sub_2 != '') {
 
 do {
 	$filename = $prefix . bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
-	$targetPath = $upload_dir . '/' . $filename;
-} while (file_exists($targetPath));
+	$target_path = $upload_dir . '/' . $filename;
+} while (file_exists($target_path));
 
+try {
+  $pdo = getPDO();
+  $pdo->beginTransaction();
 
-if (file_put_contents($targetPath, $processed) === false) {
-	json_error('SAVE_FAILED', 500);
+  if (file_put_contents($target_path, $processed) === false) {
+    throw new RuntimeException('SAVE_FAILED');
+  }
+
+	$visibility = $_POST['visibility'] ?? 'public';
+
+	if (!in_array($visibility, $allowed_visibility, true)) {
+		$visibility = 'public';
+	}
+
+	$data = [
+		'user_id' => $user_id,
+		'category' => $category,
+		'filename' => $filename,
+		'original_filename' => trim(basename($_FILES['image']['name'])),
+		'mime_type' => $mime,
+		'file_size' => strlen($processed),
+		'file_hash' => hash('sha256', $processed),
+		'visibility' => $visibility,
+		'shot_at' => $show_at->format('Y-m-d H:i:s'),
+	];
+  uploaderInsertImage($pdo, $data);
+  $pdo->commit();
+} catch (Throwable $e) {
+
+  if (isset($pdo) && $pdo->inTransaction()) {
+    $pdo->rollBack();
+  }
+
+  if (!empty($target_path) && is_file($target_path)) {
+    unlink($target_path);
+  }
+
+  if ($e->getMessage() === 'ALREADY_SAVED_IMAGE') {
+    json_error('ALREADY_SAVED_IMAGE', 400);
+  }
+
+  json_error('UPLOAD_FAILED' . $e, 500);
 }
 
 echo json_encode([

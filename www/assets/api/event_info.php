@@ -3,7 +3,10 @@ header('Content-Type: application/json; charset=utf-8');
 include_once(__DIR__ . '/../../../functions/init.php');
 
 // ガード（トークンチェック）
-if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+if (
+  !isset($_SESSION['csrf_token'], $_POST['csrf_token']) ||
+  !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
   echo json_encode([
     'status' => 'fail',
     'message' => 'token error'
@@ -69,7 +72,6 @@ foreach ($sub_dirs as $dir) {
       $file_path = $full_path . '/' . $file;
 
       if (is_file($file_path)) {
-
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (in_array($ext, ['jpg', 'jpeg'])) {
@@ -86,7 +88,7 @@ foreach ($sub_dirs as $dir) {
 }
 
 try {
-  $sql = "SELECT * FROM event_info WHERE event_id = :event_id LIMIT 1";
+  $sql = "SELECT title_ja, title_en, excerpt_ja, excerpt_en, event_date, vote_counting_at FROM event_info WHERE event_id = :event_id LIMIT 1";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([':event_id' => $event_id]);
 

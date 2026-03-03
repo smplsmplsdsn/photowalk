@@ -9,7 +9,7 @@ const getUser = (val = '') => {
     method: 'POST',
     dataType: 'json',
     data: {
-      uid: val,
+      public_id: val,
       event_id: Photos.event_id,
       csrf_token: CSRF_TOKEN
     }

@@ -9,11 +9,6 @@ if (isset($_SESSION['csrf_token_for_img'])) {
 
 $event_id = $_GET['event_id'] ?? '';
 
-// TODO 2026/2/23以降削除
-if ($event_id == '') {
-  $event_id = $_GET['event_name'] ?? '';
-}
-
 // ガード
 if ($event_id === '') {
   $error_message = 'NO DATA';
@@ -90,7 +85,7 @@ if (empty($result)) {
   }
 
   $sql_voters = "
-    SELECT COUNT(DISTINCT uid) AS total_voters
+    SELECT COUNT(DISTINCT user_id) AS total_voters
     FROM likes
     WHERE event_id = :event_id
   ";

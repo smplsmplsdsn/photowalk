@@ -3,7 +3,10 @@ header('Content-Type: application/json; charset=utf-8');
 include_once(__DIR__ . '/../../../functions/init.php');
 
 // ガード（トークンチェック）
-if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+if (
+  !isset($_SESSION['csrf_token'], $_POST['csrf_token']) ||
+  !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
   echo json_encode([
     'status' => 'fail',
     'message' => 'token error'
@@ -12,12 +15,12 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
 }
 
 do {
-  $uid = $handle = generateHandle();
+  $public_id = $handle = generateHandle();
 
   try {
-    $stmt = $pdo->prepare("INSERT INTO users (uid, handle) VALUES (:uid, :handle)");
+    $stmt = $pdo->prepare("INSERT INTO users (public_id, handle) VALUES (:public_id, :handle)");
     $stmt->execute([
-      ':uid' => $uid,
+      ':public_id' => $public_id,
       ':handle' => $handle
     ]);
     break;
@@ -39,6 +42,6 @@ do {
 
 echo json_encode([
   'status' => 'success',
-  'uid' => $uid,
+  'public_id' => $public_id,
 ]);
 exit;

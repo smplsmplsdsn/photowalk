@@ -134,7 +134,7 @@ Fn.uploader = (obj = {}) => {
 
       form_data.append('image', file_obj.file)
       form_data.append('csrf_token', CSRF_TOKEN)
-      form_data.append('dir2', DIR2)
+      form_data.append('category', CATEGORY)
 
       setStatus(file_obj, 'uploading')
       state.active_count++
