@@ -1,6 +1,8 @@
+$upload-bg: #fff;
 .uploader {
   position: relative;
   z-index: 1;
+  background: $upload-bg;
 
   .uploader-droparea {
     position: sticky;
@@ -22,7 +24,7 @@
 
   .uploader-filecard {
     display: grid;
-    grid-template-columns: 80px 1fr 70px;
+    grid-template-columns: 40px 80px 1fr 70px;
     gap: 10px;
     align-items: center;
     border: 1px solid #ddd;
@@ -122,11 +124,48 @@
     display: flex;
     justify-content: center;
     padding:10px 20px;
+    background: $upload-bg;
 
     button,
     button:disabled  {
       background: #fff;
       opacity: 1;
+    }
+  }
+
+  .uploader-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .uploader-delete-button {
+    position:relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    rotate: 45deg;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: $color-default;
+      cursor: pointer;
+    }
+
+    &::before {
+      width: 100%;
+      height: 2px;
+    }
+
+    &::after {
+      width: 2px;
+      height: 100%;
     }
   }
 }

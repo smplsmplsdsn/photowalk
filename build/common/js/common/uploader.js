@@ -20,10 +20,7 @@ Fn.uploader = (obj = {}) => {
     ]
   }
 
-  const button_label = {
-    delete: '削除',
-    retry: '再試行'
-  }
+  const button_retry_label = '再試行'
 
   const status_label = {
     waiting: 'アップロードボタンのクリック待ち',
@@ -42,6 +39,8 @@ Fn.uploader = (obj = {}) => {
     UPLOAD_ERROR: 'アップロードに失敗しました',
     SERVER_CONNECT_ERROR: 'サーバーに接続できませんでした',
     INVALID_TYPE: '対応していないファイルです',
+
+    UPLOAD_ERROR_1: 'ファイルサイズが大きすぎます',
     FILE_TOO_LARGE: 'ファイルサイズが大きすぎます',
     MOVE_FAILED: 'サーバーエラーが発生しました',
     OTHER: '不正なレスポンスです'
@@ -245,7 +244,9 @@ Fn.uploader = (obj = {}) => {
             progress_wrap = document.createElement('div'),
             bar = document.createElement('div'),
             status = document.createElement('div'),
-            action_btn = document.createElement('button')
+            action_retry_btn = document.createElement('button'),
+            status_delete = document.createElement('div'),
+            action_delete_btn = document.createElement('div')
 
       card.className = `uploader-filecard is-${file_obj.status}`
       text_wrap.className = 'uploader-text'
@@ -254,12 +255,12 @@ Fn.uploader = (obj = {}) => {
       progress_wrap.className = 'uploader-filecardprogress'
       bar.className = 'uploader-filecardbar'
       status.className = 'uploader-filecardstatus'
-      action_btn.type = 'button'
-      action_btn.className = 'uploader-filecardremove'
-      action_btn.textContent = button_label.delete
+      action_retry_btn.type = 'button'
+      action_retry_btn.textContent = button_retry_label
+      status_delete.className = 'uploader-delete'
+      action_delete_btn.className = 'uploader-delete-button'
 
       name.textContent = file_obj.file.name
-      img.src = file_obj.preview_url
 
       img.onerror = () => {
         img.remove()
@@ -270,11 +271,13 @@ Fn.uploader = (obj = {}) => {
         }
       }
 
+      img.src = file_obj.preview_url
+
+
       const updateButton = () => {
 
         if (file_obj.status === 'error') {
-          action_btn.textContent = button_label.retry
-          action_btn.onclick = () => {
+          action_retry_btn.onclick = () => {
             file_obj.status = 'waiting'
             file_obj.error_code = ''
             updateFileCard(file_obj)
@@ -311,22 +314,23 @@ Fn.uploader = (obj = {}) => {
           }
 
           Uploader.processQueue()
-        } else {
-          action_btn.textContent = button_label.delete
-          action_btn.onclick = () => fadeOutAndRemove(file_obj)
         }
       }
+
+      action_delete_btn.onclick = () => fadeOutAndRemove(file_obj)
 
       updateButton()
 
       progress_wrap.appendChild(bar)
+      status_delete.appendChild(action_delete_btn)
       img_wrap.appendChild(img)
       text_wrap.appendChild(name)
       text_wrap.appendChild(progress_wrap)
       text_wrap.appendChild(status)
+      card.appendChild(status_delete)
       card.appendChild(img_wrap)
       card.appendChild(text_wrap)
-      card.appendChild(action_btn)
+      card.appendChild(action_retry_btn)
 
       file_obj.el = card
       file_obj.barEl = bar
