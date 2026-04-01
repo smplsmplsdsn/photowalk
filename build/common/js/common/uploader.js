@@ -39,8 +39,9 @@ Fn.uploader = (obj = {}) => {
     UPLOAD_ERROR: 'アップロードに失敗しました',
     SERVER_CONNECT_ERROR: 'サーバーに接続できませんでした',
     INVALID_TYPE: '対応していないファイルです',
+    UPLOAD_ERR_CANT_WRITE: 'アップロードできませんでした。指定先の書き込み権限がないようです。',
+    UPLOAD_ERR_EXTENSION: 'アップロードできませんでした。セキュリティ問題が発生しているようです。',
 
-    UPLOAD_ERROR_1: 'ファイルサイズが大きすぎます',
     FILE_TOO_LARGE: 'ファイルサイズが大きすぎます',
     MOVE_FAILED: 'サーバーエラーが発生しました',
     OTHER: '不正なレスポンスです'

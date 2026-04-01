@@ -59,14 +59,48 @@ if (!isset($_FILES['image'])) {
 	json_error('NO_FILE');
 }
 
-// upload error
-if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-	json_error('UPLOAD_ERROR');
+// 元サイズ check（サーバー保護、20MBの設定は適当）
+if ($_FILES['image']['size'] > 20 * 1024 * 1024) {
+    json_error('FILE_TOO_LARGE');
 }
 
-// 元サイズ check（サーバー保護）
-if ($_FILES['image']['size'] > 40 * 1024 * 1024) {
-    json_error('FILE_TOO_LARGE');
+// upload error cehck
+if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+
+	switch ($_FILES['image']['error']) {
+
+		// php.ini 制限超え、フォーム指定サイズ超え
+		case UPLOAD_ERR_INI_SIZE:
+		case UPLOAD_ERR_FORM_SIZE:
+		case 1:
+		case 2:
+			json_error('FILE_TOO_LARGE');
+			break;
+
+		// 一部しかアップロードされなかった（通信切れなど）
+		case UPLOAD_ERR_PARTIAL:
+		case 3:
+			json_error('TIMEOUT_ERROR');
+			break;
+
+		// UPLOAD_ERR_NO_FILE 4:ファイル未選択
+		// UPLOAD_ERR_NO_TMP_DIR 6:一時フォルダがない（サーバー設定ミス）
+
+		// 書き込み失敗（権限・容量）
+		case UPLOAD_ERR_CANT_WRITE:
+		case 7:
+			json_error('UPLOAD_ERR_CANT_WRITE');
+			break;
+
+		// 拡張による停止（セキュリティ系z）
+		case UPLOAD_ERR_EXTENSION:
+		case 7:
+			json_error('UPLOAD_ERR_EXTENSION');
+			break;
+
+		default:
+			json_error('UPLOAD_ERROR');
+	}
 }
 
 // MIME check
