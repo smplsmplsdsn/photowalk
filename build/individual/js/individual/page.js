@@ -26,7 +26,7 @@ const page_init = `
     <div class="init-excerpt">
       <div class="ja">
         <p>「誰が」「どの写真」を選んだか分からないから、完全に自分視点になれるのがイイ！</p>
-        <p>さっそくイベントIDを入力してはじめましょう！</p>
+        <p>さっそくはじめましょう！</p>
       </div>
       <div class="en">
         <p>Because you don’t know who chose which photo, you can fully experience it from your own perspective — and that’s what makes it great!</p>
@@ -35,7 +35,7 @@ const page_init = `
     </div>
     <form class="js-form-event">
       <div>
-        <input type="text" name="id" value="">
+        <input type="text" name="id" value="" placeholder="event id">
         <button type="submit">
           <span class="ja">スタート</span>
           <span class="en">START</span>

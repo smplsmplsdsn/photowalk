@@ -45,6 +45,7 @@ services:
       - ./www:/var/www/html
       - ./functions:/var/www/functions
       - ./storage:/var/www/storage
+      - ./php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - service-net
 

@@ -224,8 +224,12 @@ $(() => {
 
     $('.js-page').html(page_photos).hide()
 
-    for (i = 0; i < images_rand.length; i++) {
-      html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photo.php?filename=${Photos.event_id}/${photowalker}/${images_rand[i]}" loading="lazy"></li>`
+    // for (i = 0; i < images_rand.length; i++) {
+    //   html_images += `<li data-filename="${images_rand[i]}"><img src="./assets/photo.php?filename=${Photos.event_id}/${photowalker}/${images_rand[i]}" loading="lazy"></li>`
+    // }
+
+    for (i = 0; i < images.length; i++) {
+      html_images += `<li data-filename="${images[i]}"><img src="./assets/photo.php?filename=${Photos.event_id}/${photowalker}/${images[i]}" loading="lazy"></li>`
     }
 
     $('.js-photos-list').html(html_images)
