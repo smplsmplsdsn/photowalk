@@ -35,24 +35,31 @@ if ($is_https) {
 </head>
 <body>
 
-<div class="flex-center js-message">
-  <div>
-    <p style="margin:0 0 10px;line-height:1.5;"><strong>【オリジナル写真提供のお願い】</strong><br>選考された一枚をここから送ってください！<br>同数で一枚に絞り込めない場合は、複数送っていただければ、たけたけが独断で決定させていただきますw</p>
-    <p style="margin:0 0 20px;line-height:1.5;"><a href="/report.php?event_id=260215-koenji" target="_blank">選考写真を確認する</a></p>
+  <div class="uploader">
+    <div class="uploader-function">
+      <div class="uploader-droparea js-uploader-droparea">
+        <input type="file" name="image" class="js-uploader-input" accept="image/*" multiple hidden>
+        <div class="uploader-dropinner">画像をドラッグ＆ドロップ<br>または<br>クリックして選択</div>
+      </div>
+      <div class="js-uploader-filelist"></div>
+      <div class="uploader-controls">
+        <button type="button" class="js-uploader-button" disabled>アップロード</button>
+      </div>
+      <ul class="uploader-lists js-uploaded-list">
+        <li><img src="./assets/images/checkmark.svg"></li>
+        <li><img src="./assets/images/checkmark.svg"></li>
+        <li><img src="./assets/images/checkmark.svg"></li>
+        <li><img src="./assets/images/checkmark.svg"></li>
+        <li><img src="./assets/images/checkmark.svg"></li>
+      </ul>
+    </div>
+    <div class="uploader-list">
+      <ul class="uploader-lists"></ul>
 
-<div class="uploader">
-  <div class="uploader-droparea js-uploader-droparea">
-    <input type="file" name="image" class="js-uploader-input" accept="image/*" multiple hidden>
-    <div class="uploader-dropinner">画像をドラッグ＆ドロップ<br>または<br>クリックして選択</div>
+    </div>
   </div>
-  <div class="js-uploader-filelist"></div>
-  <div class="uploader-controls">
-    <button type="button" class="js-uploader-button" disabled>アップロード</button>
-  </div>
-</div>
 
-  </div>
-</div>
+
 
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>

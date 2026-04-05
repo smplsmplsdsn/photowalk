@@ -76,6 +76,7 @@ $(() => {
 
   // アカウント作成
   $(document).on('click', '.js-account-create', function () {
+    console.log('test1')
 
     $(this).replaceWith(`
       <button class="js-account-create-number">
@@ -86,9 +87,17 @@ $(() => {
       </button>
     `)
 
+    console.log('test2')
+
     async function ajax() {
+
+      console.log('test3')
+
       try {
         const d = await getCreateUser()
+
+        console.log('test4', d)
+
 
         // ガード
         if (d.status != 'success') {
@@ -108,6 +117,7 @@ $(() => {
         $('.js-account[data-flow="1"]').hide()
         $('.js-account[data-flow="2-1"]').show()
       } catch (error) {
+        console.log(error)
         $('.js-page').html(page_error)
         return false
       }

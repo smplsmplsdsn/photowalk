@@ -100,7 +100,7 @@ $sql = "
 CREATE TABLE IF NOT EXISTS likes (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   event_id VARCHAR(100) NOT NULL,
-  user_id VARCHAR(50) NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
   photowalker VARCHAR(50) NOT NULL,
   filename VARCHAR(255) NOT NULL,
   created_at DATETIME
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS likes (
   INDEX idx_likes_event (event_id),
   INDEX idx_likes_user (user_id),
   INDEX idx_likes_photowalker (photowalker),
-  INDEX idx_likes_filename (filename)
+  INDEX idx_likes_filename (filename),
   CONSTRAINT fk_likes_user
     FOREIGN KEY (user_id)
     REFERENCES users(id)
@@ -122,5 +122,6 @@ try {
   $pdo->exec($sql);
 } catch (PDOException $e) {
   echo "テーブル作成エラー： likes";
+  echo $e->getMessage();
   exit;
 }
