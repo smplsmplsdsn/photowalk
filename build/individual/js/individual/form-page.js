@@ -282,11 +282,21 @@ $(() => {
     }
   })
 
+
+  let pos_layout = 0
+
   // 画像表示レイアウト
   $(document).on('click', '.js-photos-layout', function () {
-    const layout = ($('.js-photos-list').attr('data-layout') === 'one')? 'column' : 'one'
+    const layout = ($('.js-photos-list').attr('data-layout') === 'one')? 'column' : 'one',
+    pos_layout_now = window.pageYOffset
 
     $('.js-photos-list').attr('data-layout', layout)
+
+    window.scrollTo({
+      top: pos_layout,
+    })
+
+    pos_layout = pos_layout_now
   })
 
   // 画像背景
