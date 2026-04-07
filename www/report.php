@@ -182,6 +182,15 @@ if (empty($result)) {
     .report {
       padding: 30px;
     }
+
+    @media (max-width: 500px) {
+      .countdown + p {
+        padding-top: 30px;
+      }
+      .countdown + p:before {
+        content: '»'
+      }
+    }
   </style>
 </head>
 <body>
