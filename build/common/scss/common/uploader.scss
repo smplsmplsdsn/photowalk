@@ -129,6 +129,7 @@ $upload-bg: #fff;
   .uploader-controls {
     position: sticky;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     z-index: 2;
     display: flex;
     justify-content: center;
