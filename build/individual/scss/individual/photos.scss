@@ -48,6 +48,9 @@
 
 .photos-inner {
   min-height: 100vh;
+  padding-top: $var-size;
+  padding-bottom: $var-size;
+  box-sizing: border-box;
 }
 
 .photos-list-excerpt {
