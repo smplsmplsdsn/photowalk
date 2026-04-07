@@ -102,7 +102,7 @@ if (empty($result)) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自薦＆他薦で決める一枚 集計</title>
+  <title>みんなで決める、それぞれの一枚 集計</title>
   <meta name="description" content="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -108,7 +108,10 @@ try {
   if ($vote_dt < $now) {
     echo json_encode([
       'status' => 'fail',
-      'message' => '<span class="ja">このイベントへの投票はすでに終了しています。</span><span class="en">The voting period for this event has ended.</span>'
+      'message' => '
+        <span class="ja">このイベントへの投票はすでに終了しています。</span><span class="en">The voting period for this event has ended.</span><br>
+        <a href="/report.php?event_id=' . $event_id . '"><span class="ja">結果発表！！！</span><span class="en">The Results Are In!!!</span></a>
+      '
     ]);
     exit;
   }
@@ -128,5 +131,6 @@ echo json_encode([
   'title_en' => $row['title_en'],
   'excerpt_ja' => $row['excerpt_ja'],
   'excerpt_en' => $row['excerpt_en'],
-  'date' => date('M d, Y', strtotime($row['event_date'])),
+  'date' => strtotime($row['event_date']),
+  'vote_counting_at' => strtotime($row['vote_counting_at']),
 ]);

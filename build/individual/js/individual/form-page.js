@@ -35,10 +35,33 @@ $(() => {
         params.set("event_id", val)
         history.replaceState(null, "", "?" + params.toString())
 
+        const account_time = (+d.date) * 1000,
+              account_time_ja = Fn.getYmdJa(account_time),
+              account_time_en = new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              }).format(account_time)
+
+        const account_limited_time = (+d.vote_counting_at) * 1000,
+              account_limited_time_ja = Fn.getYmdJa(account_limited_time, 'ymdhi'),
+              account_limited_time_en = new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+              }).format(account_limited_time)
+
+
         $('.js-page').html(page_account).hide()
         $('.js-account-title .ja').text(d.title_ja)
         $('.js-account-title .en').text(d.title_en)
-        $('.js-account-time').text(d.date)
+        $('.js-account-time .ja').text(account_time_ja)
+        $('.js-account-time .en').text(account_time_en)
+        $('.js-account-limited-time .ja').text(account_limited_time_ja)
+        $('.js-account-limited-time .en').text(account_limited_time_en)
         $('.js-account-excerpt .ja').text(d.excerpt_ja)
         $('.js-account-excerpt .en').text(d.excerpt_en)
         $('.js-page').show()

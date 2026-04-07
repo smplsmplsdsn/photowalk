@@ -20,17 +20,15 @@ const page_init = `
 <section class="flex-center">
   <div class="init">
     <h1>
-      <span class="ja">自薦＆他薦で決める一枚</span>
-      <span class="en">Chosen — By You, By Them</span>
+      <span class="ja">みんなで決める、<span class="nowrap">それぞれの一枚</span></span>
+      <span class="en">One Photo Each, <span class="nowrap">Chosen Together</span></span>
     </h1>
     <div class="init-excerpt">
       <div class="ja">
-        <p>「誰が」「どの写真」を選んだか分からないから、完全に自分視点になれるのがイイ！</p>
-        <p>さっそくはじめましょう！</p>
+        <p>「誰が」「どの写真」を選んだか分からない仕組みを取り入れています。あなた視点での「なんかいいな」をセレクトしてください！</p>
       </div>
       <div class="en">
-        <p>Because you don’t know who chose which photo, you can fully experience it from your own perspective — and that’s what makes it great!</p>
-        <p>Enter the Event ID and get started right away!</p>
+        <p>I designed it so you won’t know who chose which photo. Just go with what feels right to you.</p>
       </div>
     </div>
     <form class="js-form-event">
@@ -57,18 +55,27 @@ const page_account = `
       </a>
     </p>
     <hgroup>
+      <p class="js-account-time">
+        <span class="ja"></span>
+        <span class="en"></span>
+      </p>
       <h2 class="js-account-title"><span class="ja"></span><span class="en"></span></h2>
-      <p class="js-account-time"></p>
     </hgroup>
     <div class="account-excerpt">
       <p class="js-account-excerpt" style="margin-bottom:10px;"><span class="ja"></span><span class="en"></span></p>
 
       <div class="ja">
-        <p>選出方法ですが、自薦＆他薦で選出します。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
+        <p>
+          期限：<span class="js-account-limited-time"><span class="ja"></span></span><br>
+          結果発表は、期限日時に即時反映します。
+        </p>
         <p>ユーザーIDはありますか？</p>
       </div>
       <div class="en">
-        <p>For the selection method, we’ll accept both self-nominations and nominations by others.<br>For each photowalker, choose the photos that really catch your eye (“Wow!” photos) and decide on one photo per person.</p>
+        <p>
+          Deadline：<span class="js-account-limited-time"><span class="en"></span></span><br>
+          The results will be published immediately at the scheduled date and time.
+        </p>
         <p>Do you have your USER ID?</p>
       </div>
     </div>
