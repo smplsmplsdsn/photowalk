@@ -19,11 +19,13 @@
   &--bottom-confirm {
     justify-content: flex-end;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
   }
 
   &--bottom-submit {
     justify-content: space-between;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom);
   }
 
   button {
