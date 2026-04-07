@@ -47,10 +47,8 @@
 }
 
 .photos-inner {
-  min-height: 100vh;
-  padding-top: $var-size;
-  padding-bottom: $var-size;
-  box-sizing: border-box;
+  height: calc(100vh - #{$var-size*2});
+  overflow-y: auto;
 }
 
 .photos-list-excerpt {
