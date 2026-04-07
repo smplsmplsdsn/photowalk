@@ -22,3 +22,5 @@ document.addEventListener('contextmenu', async e => {
   const res = await fetch('/assets/api/csrf_token_for_img.php')
   const data = await res.json()
 })
+
+Fn.setLang()
