@@ -60,7 +60,7 @@ if (!isset($_FILES['image'])) {
 }
 
 // 元サイズ check（サーバー保護、20MBの設定は適当）
-if ($_FILES['image']['size'] > 20 * 1024 * 1024) {
+if ($_FILES['image']['size'] > 100 * 1024 * 1024) {
     json_error('FILE_TOO_LARGE');
 }
 

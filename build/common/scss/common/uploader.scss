@@ -1,8 +1,17 @@
 $upload-bg: #fff;
+
 .uploader {
   position: relative;
-  z-index: 1;
-  background: $upload-bg;
+
+  .uploader-function,
+  .uploader-list {
+    padding: 20px;
+  }
+
+  .uploader-function {
+    z-index: 1;
+    background: $upload-bg;
+  }
 
   .uploader-droparea {
     position: sticky;
@@ -123,7 +132,7 @@ $upload-bg: #fff;
     z-index: 2;
     display: flex;
     justify-content: center;
-    padding:10px 20px;
+    padding:10px 20px 20px;
     background: $upload-bg;
 
     button,
@@ -166,6 +175,30 @@ $upload-bg: #fff;
     &::after {
       width: 2px;
       height: 100%;
+    }
+  }
+
+  .uploader-lists {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px,1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 10px;
+    list-style: none;
+    background: #eee;
+
+    li {
+      margin: 0;
+      padding: 10px;
+      background: #fff;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      cursor: pointer;
     }
   }
 }
