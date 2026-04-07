@@ -65,17 +65,11 @@ const page_account = `
       <p class="js-account-excerpt" style="margin-bottom:10px;"><span class="ja"></span><span class="en"></span></p>
 
       <div class="ja">
-        <p>
-          期限：<span class="js-account-limited-time"><span class="ja"></span></span><br>
-          結果発表は、期限日時に即時反映します。
-        </p>
+        <p>期限：<span class="js-account-limited-time"><span class="ja"></span></span></p>
         <p>ユーザーIDはありますか？</p>
       </div>
       <div class="en">
-        <p>
-          Deadline：<span class="js-account-limited-time"><span class="en"></span></span><br>
-          The results will be published immediately at the scheduled date and time.
-        </p>
+        <p>Deadline：<span class="js-account-limited-time"><span class="en"></span></span></p>
         <p>Do you have your USER ID?</p>
       </div>
     </div>

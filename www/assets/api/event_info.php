@@ -40,7 +40,7 @@ $base_path = __DIR__ . '/../../../storage/photos/' . $event_id;
 if (!is_dir($base_path)) {
   echo json_encode([
     'status' => 'error',
-    'message' => '<span class="ja">投票できるイベントIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>'
+    'message' => '<span class="ja">投票できる写真はまだありません。</span><span class="en">There are no photos available for voting yet.</span>'
   ]);
   exit;
 }

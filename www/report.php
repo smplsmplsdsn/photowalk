@@ -34,7 +34,7 @@ if (empty($result)) {
     $error_message = '
       <span class="ja">投票受付中！</span>
       <span class="en">Voting in progress!</span>
-      <a href="/?event_id=' . $event_id . '">
+      <a href="/?event_id=' . $event_id . '" target="_blank">
         <span class="ja">エントリー写真を見る</span>
         <span class="en">View Submitted Photos</span>
       </a>
