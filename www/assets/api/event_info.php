@@ -34,59 +34,6 @@ if (!preg_match('/^[a-zA-Z0-9_-]+$/', $event_id)) {
   exit;
 }
 
-
-$base_path = __DIR__ . '/../../../storage/photos/' . $event_id;
-
-if (!is_dir($base_path)) {
-  echo json_encode([
-    'status' => 'error',
-    'message' => '<span class="ja">投票できるイベントIDではありません。<br>ID名を確かめてください。</span><span class="en">This ID is not valid for voting in this event.<br>Please double-check your ID name.</span>'
-  ]);
-  exit;
-}
-
-$photo_walkers = [];
-
-$sub_dirs = scandir($base_path);
-
-foreach ($sub_dirs as $dir) {
-
-  if ($dir === '.' || $dir === '..') {
-    continue;
-  }
-
-  $full_path = $base_path . '/' . $dir;
-
-  if (is_dir($full_path)) {
-
-    $images = [];
-
-    $files = scandir($full_path);
-
-    foreach ($files as $file) {
-
-      if ($file === '.' || $file === '..') {
-        continue;
-      }
-
-      $file_path = $full_path . '/' . $file;
-
-      if (is_file($file_path)) {
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-        if (in_array($ext, ['jpg', 'jpeg'])) {
-          $images[] = $file;
-        }
-      }
-    }
-
-    $photo_walkers[] = [
-      'name' => $dir,
-      'images' => $images
-    ];
-  }
-}
-
 try {
   $sql = "SELECT title_ja, title_en, excerpt_ja, excerpt_en, event_date, vote_counting_at FROM event_info WHERE event_id = :event_id LIMIT 1";
   $stmt = $pdo->prepare($sql);
@@ -102,13 +49,67 @@ try {
     exit;
   }
 
+
+  $base_path = __DIR__ . '/../../../storage/photos/' . $event_id;
+
+  if (!is_dir($base_path)) {
+    echo json_encode([
+      'status' => 'error',
+      'message' => '<span class="ja">投票できる写真はまだありません。</span><span class="en">There are no photos available for voting yet.</span>'
+    ]);
+    exit;
+  }
+
+  $photo_walkers = [];
+  $sub_dirs = scandir($base_path);
+
+  foreach ($sub_dirs as $dir) {
+
+    if ($dir === '.' || $dir === '..') {
+      continue;
+    }
+
+    $full_path = $base_path . '/' . $dir;
+
+    if (is_dir($full_path)) {
+      $images = [];
+      $files = scandir($full_path);
+
+      foreach ($files as $file) {
+
+        if ($file === '.' || $file === '..') {
+          continue;
+        }
+
+        $file_path = $full_path . '/' . $file;
+
+        if (is_file($file_path)) {
+          $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+          if (in_array($ext, ['jpg', 'jpeg'])) {
+            $images[] = $file;
+          }
+        }
+      }
+
+      $photo_walkers[] = [
+        'name' => $dir,
+        'images' => $images
+      ];
+    }
+  }
+
+
   $vote_dt = new DateTime($row['vote_counting_at']);
   $now = new DateTime();
 
   if ($vote_dt < $now) {
     echo json_encode([
       'status' => 'fail',
-      'message' => '<span class="ja">このイベントへの投票はすでに終了しています。</span><span class="en">The voting period for this event has ended.</span>'
+      'message' => '
+        <span class="ja">このイベントへの投票はすでに終了しています。</span><span class="en">The voting period for this event has ended.</span><br>
+        <a href="/report.php?event_id=' . $event_id . '"><span class="ja">結果発表！！！</span><span class="en">The Results Are In!!!</span></a>
+      '
     ]);
     exit;
   }
@@ -128,5 +129,6 @@ echo json_encode([
   'title_en' => $row['title_en'],
   'excerpt_ja' => $row['excerpt_ja'],
   'excerpt_en' => $row['excerpt_en'],
-  'date' => date('M d, Y', strtotime($row['event_date'])),
+  'date' => strtotime($row['event_date']),
+  'vote_counting_at' => strtotime($row['vote_counting_at']),
 ]);

@@ -47,7 +47,8 @@
 }
 
 .photos-inner {
-  min-height: 100vh;
+  height: calc(100dvh - #{$var-size*2});
+  overflow-y: auto;
 }
 
 .photos-list-excerpt {

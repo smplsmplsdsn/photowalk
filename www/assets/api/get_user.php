@@ -37,12 +37,12 @@ try {
   $where = '';
   $params = [];
 
-  if ($user_id) {
-    $where = 'id = :user_id';
-    $params[':user_id'] = $user_id;
-  } elseif ($public_id) {
+  if ($public_id) {
     $where = 'public_id = :public_id';
     $params[':public_id'] = $public_id;
+  } elseif ($user_id) {
+    $where = 'id = :user_id';
+    $params[':user_id'] = $user_id;
   } else {
     echo json_encode([
       'status' => 'fail',

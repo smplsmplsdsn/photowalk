@@ -4,5 +4,16 @@
   font-weight: bold;
   color: #c00;
   line-height: 1.5;
+
+  a {
+    color: #000;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    font-weight: normal;
+
+    &::before {
+      content: '» ';
+    }
+  }
 }
 

@@ -35,10 +35,33 @@ $(() => {
         params.set("event_id", val)
         history.replaceState(null, "", "?" + params.toString())
 
+        const account_time = (+d.date) * 1000,
+              account_time_ja = Fn.getYmdJa(account_time),
+              account_time_en = new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              }).format(account_time)
+
+        const account_limited_time = (+d.vote_counting_at) * 1000,
+              account_limited_time_ja = Fn.getYmdJa(account_limited_time, 'ymdhi'),
+              account_limited_time_en = new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+              }).format(account_limited_time)
+
+
         $('.js-page').html(page_account).hide()
         $('.js-account-title .ja').text(d.title_ja)
         $('.js-account-title .en').text(d.title_en)
-        $('.js-account-time').text(d.date)
+        $('.js-account-time .ja').text(account_time_ja)
+        $('.js-account-time .en').text(account_time_en)
+        $('.js-account-limited-time .ja').text(account_limited_time_ja)
+        $('.js-account-limited-time .en').text(account_limited_time_en)
         $('.js-account-excerpt .ja').text(d.excerpt_ja)
         $('.js-account-excerpt .en').text(d.excerpt_en)
         $('.js-page').show()
@@ -76,7 +99,6 @@ $(() => {
 
   // アカウント作成
   $(document).on('click', '.js-account-create', function () {
-    console.log('test1')
 
     $(this).replaceWith(`
       <button class="js-account-create-number">
@@ -87,17 +109,10 @@ $(() => {
       </button>
     `)
 
-    console.log('test2')
-
     async function ajax() {
-
-      console.log('test3')
 
       try {
         const d = await getCreateUser()
-
-        console.log('test4', d)
-
 
         // ガード
         if (d.status != 'success') {
@@ -117,7 +132,6 @@ $(() => {
         $('.js-account[data-flow="1"]').hide()
         $('.js-account[data-flow="2-1"]').show()
       } catch (error) {
-        console.log(error)
         $('.js-page').html(page_error)
         return false
       }
@@ -186,8 +200,6 @@ $(() => {
           })
           return false
         }
-
-        Photos.handle = d.user.handle
 
         d.likes.forEach(item => {
           const key = item.photowalker
@@ -282,11 +294,18 @@ $(() => {
     }
   })
 
+
+  let pos_layout = 0
+
   // 画像表示レイアウト
   $(document).on('click', '.js-photos-layout', function () {
-    const layout = ($('.js-photos-list').attr('data-layout') === 'one')? 'column' : 'one'
+    const layout = ($('.js-photos-list').attr('data-layout') === 'one')? 'column' : 'one',
+    pos_layout_now = $('.js-photos-scroll').scrollTop()
 
     $('.js-photos-list').attr('data-layout', layout)
+    $('.js-photos-scroll').scrollTop(pos_layout)
+
+    pos_layout = pos_layout_now
   })
 
   // 画像背景
@@ -313,7 +332,9 @@ $(() => {
 
     $('.js-photos-list li.temp').removeClass('temp')
     $('.js-photos').attr('data-type', 'submit')
-    window.scrollTo(0, 1)
+
+
+    $('.js-photos-scroll').scrollTop(0)
   })
 
   // 画像 決定
@@ -343,7 +364,7 @@ $(() => {
       const param = {}
 
       param.event_id = Photos.event_id
-      param.public_id = Photos.handle
+      param.public_id = Photos.handle || Photos.ls.public_id
       param.photowalker = Photos.selected_photowaker
       param.images = []
 
@@ -355,8 +376,6 @@ $(() => {
 
       try {
         const d = await setLikes(param)
-
-        console.log(d)
 
         // ガード
         if (d.status != 'success') {

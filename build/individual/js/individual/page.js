@@ -20,17 +20,15 @@ const page_init = `
 <section class="flex-center">
   <div class="init">
     <h1>
-      <span class="ja">自薦＆他薦で決める一枚</span>
-      <span class="en">Chosen — By You, By Them</span>
+      <span class="ja">みんなで決める、<span class="nowrap">それぞれの一枚</span></span>
+      <span class="en">One Photo Each, <span class="nowrap">Chosen Together</span></span>
     </h1>
     <div class="init-excerpt">
       <div class="ja">
-        <p>「誰が」「どの写真」を選んだか分からないから、完全に自分視点になれるのがイイ！</p>
-        <p>さっそくはじめましょう！</p>
+        <p>誰が・どの写真を選んだか、ほかの人には分からない仕組みを取り入れています。<br>あなただけの感性で「この写真、いいね」を選んでください！</p>
       </div>
       <div class="en">
-        <p>Because you don’t know who chose which photo, you can fully experience it from your own perspective — and that’s what makes it great!</p>
-        <p>Enter the Event ID and get started right away!</p>
+        <p>I designed it so that no one can see who selected which photo. Just go with what feels right to you.</p>
       </div>
     </div>
     <form class="js-form-event">
@@ -51,24 +49,27 @@ const page_account = `
 <section class="flex-center">
   <section class="account js-account" data-flow="1">
     <p class="bar2">
-      <a class="bar2-link-back" onclick="location.href='./';">
+      <a class="bar2-link-back js-link-end">
         <span class="ja">終了する</span>
         <span class="en">End</span>
       </a>
     </p>
     <hgroup>
+      <p class="js-account-time">
+        <span class="ja"></span>
+        <span class="en"></span>
+      </p>
       <h2 class="js-account-title"><span class="ja"></span><span class="en"></span></h2>
-      <p class="js-account-time"></p>
     </hgroup>
     <div class="account-excerpt">
       <p class="js-account-excerpt" style="margin-bottom:10px;"><span class="ja"></span><span class="en"></span></p>
 
       <div class="ja">
-        <p>選出方法ですが、自薦＆他薦で選出します。<br>フォトウォーカーごとに「おっ！」となった写真を選んで、一人ずつの一枚を決めましょう！</p>
+        <p>期限：<span class="js-account-limited-time"><span class="ja"></span></span></p>
         <p>ユーザーIDはありますか？</p>
       </div>
       <div class="en">
-        <p>For the selection method, we’ll accept both self-nominations and nominations by others.<br>For each photowalker, choose the photos that really catch your eye (“Wow!” photos) and decide on one photo per person.</p>
+        <p>Deadline：<span class="js-account-limited-time"><span class="en"></span></span></p>
         <p>Do you have your USER ID?</p>
       </div>
     </div>
@@ -134,7 +135,7 @@ const page_account = `
 const page_list = `
 <section class="flex-center">
   <p class="bar2">
-    <a class="bar2-link-back" onclick="location.href='./';">
+    <a class="bar2-link-back js-link-end">
       <span class="ja">終了する</span>
       <span class="en">End</span>
     </a>
@@ -181,10 +182,10 @@ const page_photos = `
       </button>
     </div>
   </nav>
-  <div class="photos-inner">
+  <div class="photos-inner js-photos-scroll">
     <p class="photos-list-excerpt" data-type="confirm">
-      <span class="ja">まずは「おっ！」となった写真をタップしてください。<br>右上のアイコンで表示切り替えもできます。</span>
-      <span class="en">Choose the photo that caught your eye.</span>
+      <span class="ja">まずは「おっ！」となった写真を何枚でもタップしてください。<br>右上のアイコンで表示切り替えもできます。</span>
+      <span class="en">First, tap any photos that catch your eye — as many as you like.<br>You can also switch views using the icon in the top right.</span>
     </p>
     <p class="photos-list-excerpt js-photos-list-excerpt" data-type="submit">
       <span class="ja">続いて、5枚に絞り込んでから投票してください。</span>

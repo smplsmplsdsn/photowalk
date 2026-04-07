@@ -32,12 +32,8 @@ if (empty($result)) {
 
   if ($vote_dt >= $now) {
     $error_message = '
-      <span class="ja">投票受付中！</span>
-      <span class="en">Voting in progress!</span>
-      <a href="/?event_id=' . $event_id . '">
-        <span class="ja">エントリー写真を見る</span>
-        <span class="en">View Submitted Photos</span>
-      </a>
+      <span class="ja">結果発表まであと...</span>
+      <span class="en">Results in...</span>
     ';
   }
 
@@ -102,7 +98,7 @@ if (empty($result)) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自薦＆他薦で決める一枚 集計</title>
+  <title>みんなで決める、それぞれの一枚 集計</title>
   <meta name="description" content="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,7 +106,6 @@ if (empty($result)) {
   <link rel="stylesheet" href="/assets/css/common.min.css?<?php echo filemtime('./assets/css/common.min.css'); ?>">
   <style>
     .countdown {
-      margin: 10px 0 0;
       font-family: 'Michroma', sans-serif;
       font-size: 32px;
       transform: scale(1, 2);
@@ -118,7 +113,8 @@ if (empty($result)) {
     }
 
     body {
-      padding: 30px;
+      margin: 0;
+      padding: 0;
     }
 
     hgroup {
@@ -171,19 +167,55 @@ if (empty($result)) {
     label input {
       margin: 0;
     }
+
+    .countdown-outer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .countdown-inner {
+      padding: 30px;
+    }
+
+    .report {
+      padding: 30px;
+    }
+
+    @media (max-width: 500px) {
+      .countdown + p {
+        padding-top: 30px;
+      }
+      .countdown + p:before {
+        content: '»'
+      }
+    }
   </style>
 </head>
 <body>
   <?php if (isset($error_message)): ?>
-    <hgroup>
-      <h1>
-        <span class="ja"><?= h($event_name_ja) ?></span>
-        <span class="en"><?= h($event_name_en) ?></span>
-      </h1>
-    </hgroup>
-    <p><?= $error_message ?></p>
-    <div class="countdown js-countdown"></div>
+    <div class="countdown-outer">
+      <div class="countdown-inner">
+        <hgroup>
+          <h1>
+            <span class="ja"><?= h($event_name_ja) ?></span>
+            <span class="en"><?= h($event_name_en) ?></span>
+          </h1>
+        </hgroup>
+        <p style="margin: 10px 0;"><?= $error_message ?></p>
+        <div>
+        <div class="countdown js-countdown" style="margin-bottom: 3rem;"></div>
+        <p>
+          <a href="/?event_id=<?= $event_id ?>" target="_blank">
+            <span class="ja">エントリー写真を見る</span>
+            <span class="en">View Submitted Photos</span>
+          </a>
+        </p>
+      </div>
+    </div>
   <?php else: ?>
+  <div class="report">
     <hgroup>
       <h1>
         <span class="ja"><?= h($event_name_ja) ?> 結果発表！</span>
@@ -218,7 +250,8 @@ if (empty($result)) {
         <?php endforeach; ?>
       </table>
     </section>
-  <?php endforeach; ?>
+    <?php endforeach; ?>
+  </div>
   <?php endif; ?>
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
