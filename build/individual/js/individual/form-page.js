@@ -344,7 +344,9 @@ $(() => {
 
     $('.js-photos-list li.temp').removeClass('temp')
     $('.js-photos').attr('data-type', 'submit')
-    window.scrollTo(0, 1)
+
+
+    $('.js-photos-scroll').scrollTop(0)
   })
 
   // 画像 決定

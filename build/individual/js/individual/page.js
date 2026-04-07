@@ -182,7 +182,7 @@ const page_photos = `
       </button>
     </div>
   </nav>
-  <div class="photos-inner">
+  <div class="photos-inner js-photos-scroll">
     <p class="photos-list-excerpt" data-type="confirm">
       <span class="ja">まずは「おっ！」となった写真を何枚でもタップしてください。<br>右上のアイコンで表示切り替えもできます。</span>
       <span class="en">First, tap any photos that catch your eye — as many as you like.<br>You can also switch views using the icon in the top right.</span>
