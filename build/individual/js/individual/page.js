@@ -25,7 +25,7 @@ const page_init = `
     </h1>
     <div class="init-excerpt">
       <div class="ja">
-        <p>「誰が」「どの写真」を選んだか分からない仕組みを取り入れています。<br>あなただけの「この写真、なんかいい」をセレクトしてください！</p>
+        <p>「誰が」「どの写真」を選んだか分からない仕組みを取り入れています。<br>あなただけの「この写真、いいね」をセレクトしてください！</p>
       </div>
       <div class="en">
         <p>I designed it so you won’t know who chose which photo. Just go with what feels right to you.</p>
@@ -184,8 +184,8 @@ const page_photos = `
   </nav>
   <div class="photos-inner">
     <p class="photos-list-excerpt" data-type="confirm">
-      <span class="ja">まずは「おっ！」となった写真をタップしてください。<br>右上のアイコンで表示切り替えもできます。</span>
-      <span class="en">Choose the photo that caught your eye.</span>
+      <span class="ja">まずは「おっ！」となった写真を何枚でもタップしてください。<br>右上のアイコンで表示切り替えもできます。</span>
+      <span class="en">First, tap any photos that catch your eye — as many as you like.<br>You can also switch views using the icon in the top right.</span>
     </p>
     <p class="photos-list-excerpt js-photos-list-excerpt" data-type="submit">
       <span class="ja">続いて、5枚に絞り込んでから投票してください。</span>
