@@ -25,7 +25,7 @@ const page_init = `
     </h1>
     <div class="init-excerpt">
       <div class="ja">
-        <p>「誰が」「どの写真」を選んだか分からない仕組みを取り入れています。あなた視点での「なんかいいな」をセレクトしてください！</p>
+        <p>「誰が」「どの写真」を選んだか分からない仕組みを取り入れています。<br>あなただけの「この写真、なんかいい」をセレクトしてください！</p>
       </div>
       <div class="en">
         <p>I designed it so you won’t know who chose which photo. Just go with what feels right to you.</p>
