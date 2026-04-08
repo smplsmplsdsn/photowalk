@@ -25,12 +25,13 @@ if (!is_dir($upload_dir)) {
 	json_error('NO_DIR');
 }
 
-// TODO ログイン判定
+// TODO session id でログイン判定して、public_idも取得しておくこと
 if (empty($_SESSION['user_id'])) {
 	json_error('UNAUTHORIZED', 401);
 }
 
 $user_id = $_SESSION['user_id'] ?? '';
+$public_id = $_SESSION['public_id'] ?? '';
 
 $category = $_POST['category'] ?? '';
 
@@ -122,7 +123,7 @@ $mime = $processed_result['mime'];
 $show_at = $processed_result['show_at'];
 $prefix = $show_at->format('YmdHis') . '_';
 
-$upload_dir = $upload_dir . '/' . $user_id;
+$upload_dir = $upload_dir . '/' . $public_id;
 
 if (!is_dir($upload_dir)) {
 	mkdir($upload_dir, 0755, true);
@@ -187,5 +188,6 @@ try {
 
 echo json_encode([
 	'status' => 'success',
+	'public_id' => $public_id,
 	'filename' => $filename
 ]);

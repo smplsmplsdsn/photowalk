@@ -35,36 +35,23 @@ if ($is_https) {
 </head>
 <body>
 
-  <div class="uploader">
+  <div class="uploader js-uploader">
     <div class="uploader-function">
       <div class="uploader-droparea js-uploader-droparea">
         <input type="file" name="image" class="js-uploader-input" accept="image/*" multiple hidden>
         <div class="uploader-dropinner">画像をドラッグ＆ドロップ<br>または<br>クリックして選択</div>
       </div>
-      <div class="js-uploader-filelist"></div>
-      <div class="uploader-controls">
-        <button type="button" class="js-uploader-button" disabled>アップロード</button>
-      </div>
-      <ul class="uploader-lists js-uploaded-list">
-        <li><img src="./assets/images/checkmark.svg"></li>
-        <li><img src="./assets/images/checkmark.svg"></li>
-        <li><img src="./assets/images/checkmark.svg"></li>
-        <li><img src="./assets/images/checkmark.svg"></li>
-        <li><img src="./assets/images/checkmark.svg"></li>
-      </ul>
     </div>
-    <div class="uploader-list">
-      <ul class="uploader-lists"></ul>
-
+    <div class="uploader-filelist js-uploader-filelist"></div>
+    <div class="uploader-controls">
+      <button type="button" class="js-uploader-button" disabled>アップロード</button>
     </div>
   </div>
-
-
 
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const CATEGORY = 'koenji3'
+    const CATEGORY = ''
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
   <script>

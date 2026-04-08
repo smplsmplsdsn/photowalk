@@ -2,21 +2,23 @@ $upload-bg: #fff;
 
 .uploader {
   position: relative;
+  height: 100dvh;
+  overflow-y: auto;
+  background: $upload-bg;
 
-  .uploader-function,
-  .uploader-list {
-    padding: 20px;
+  button:not(:disabled) {
+    border-color: $color-default;
   }
 
   .uploader-function {
-    z-index: 1;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 20px 20px 0;
     background: $upload-bg;
   }
 
   .uploader-droparea {
-    position: sticky;
-    top: 0;
-    z-index: 2;
     padding: 60px 20px;
     background: #fff;
     border: 2px dashed #ccc;
@@ -29,6 +31,10 @@ $upload-bg: #fff;
   .uploader-droparea.is-dragover {
     background: #f0f8ff;
     border-color: #007bff;
+  }
+
+  .uploader-filelist {
+    padding: 0 20px 10px;
   }
 
   .uploader-filecard {
@@ -150,31 +156,35 @@ $upload-bg: #fff;
   }
 
   .uploader-delete-button {
-    position:relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 14px;
-    height: 14px;
-    rotate: 45deg;
+    padding: 20px;
+    cursor: pointer;
 
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      background-color: $color-default;
-      cursor: pointer;
-    }
+    > div {
+      position:relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 14px;
+      height: 14px;
+      rotate: 45deg;
 
-    &::before {
-      width: 100%;
-      height: 2px;
-    }
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        background-color: $color-default;
+      }
 
-    &::after {
-      width: 2px;
-      height: 100%;
+      &::before {
+        width: 100%;
+        height: 2px;
+      }
+
+      &::after {
+        width: 2px;
+        height: 100%;
+      }
     }
   }
 

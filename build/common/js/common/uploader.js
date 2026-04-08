@@ -105,7 +105,11 @@ Fn.uploader = (obj = {}) => {
         }
 
         state.files.push(file_obj)
-        _container.appendChild(createFileCard(file_obj))
+        _filelist.appendChild(createFileCard(file_obj))
+
+        requestAnimationFrame(() => {
+          _uploader.scrollTop = _uploader.scrollHeight
+        })
       })
 
       updateButton()
@@ -167,6 +171,8 @@ Fn.uploader = (obj = {}) => {
           file_obj.progress = 100
           setStatus(file_obj, 'done')
           finalize()
+
+          Module.uploaderList.add(res, true)
           return
         }
 
@@ -229,10 +235,6 @@ Fn.uploader = (obj = {}) => {
       file_obj.statusEl.textContent = getStatusLabel(file_obj)
       file_obj.el.className = `uploader-filecard is-${file_obj.status}`
       file_obj.updateButton?.()
-
-      if (file_obj.status === 'done') {
-        fadeOutAndRemove(file_obj)
-      }
     }
 
 
@@ -247,7 +249,8 @@ Fn.uploader = (obj = {}) => {
             status = document.createElement('div'),
             action_retry_btn = document.createElement('button'),
             status_delete = document.createElement('div'),
-            action_delete_btn = document.createElement('div')
+            action_delete_btn = document.createElement('div'),
+            action_delete_btn_inner = document.createElement('div')
 
       card.className = `uploader-filecard is-${file_obj.status}`
       text_wrap.className = 'uploader-text'
@@ -332,6 +335,7 @@ Fn.uploader = (obj = {}) => {
       card.appendChild(img_wrap)
       card.appendChild(text_wrap)
       card.appendChild(action_retry_btn)
+      action_delete_btn.appendChild(action_delete_btn_inner)
 
       file_obj.el = card
       file_obj.barEl = bar
@@ -355,7 +359,8 @@ Fn.uploader = (obj = {}) => {
 
 
   /*  DOM Events */
-  const _container = document.querySelector('.js-uploader-filelist'),
+  const _uploader = document.querySelector('.js-uploader'),
+        _filelist= document.querySelector('.js-uploader-filelist'),
         _drop_area = document.querySelector('.js-uploader-droparea'),
         _input = document.querySelector('.js-uploader-input'),
         _upload_btn = document.querySelector('.js-uploader-button')
