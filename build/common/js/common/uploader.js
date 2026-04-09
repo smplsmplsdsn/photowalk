@@ -108,7 +108,10 @@ Fn.uploader = (obj = {}) => {
         _filelist.appendChild(createFileCard(file_obj))
 
         requestAnimationFrame(() => {
-          _uploader.scrollTop = _uploader.scrollHeight
+          _uploader.scrollTo({
+            top: _uploader.scrollHeight,
+            behavior: 'smooth'
+          })
         })
       })
 
