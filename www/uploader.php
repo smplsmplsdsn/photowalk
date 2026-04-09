@@ -35,16 +35,19 @@ if ($is_https) {
 </head>
 <body>
 
-  <div class="uploader js-uploader">
-    <div class="uploader-function">
-      <div class="uploader-droparea js-uploader-droparea">
-        <input type="file" name="image" class="js-uploader-input" accept="image/*" multiple hidden>
-        <div class="uploader-dropinner">画像をドラッグ＆ドロップ<br>または<br>クリックして選択</div>
+  <div class="uploader">
+
+    <div class="uploader-add js-uploader-add">
+      <div class="uploader-add-function">
+        <div class="uploader-droparea js-uploader-droparea">
+          <input type="file" name="image" class="js-uploader-input" accept="image/*" multiple hidden>
+          <div class="uploader-dropinner">画像をドラッグ＆ドロップ<br>または<br>クリックして選択</div>
+        </div>
       </div>
-    </div>
-    <div class="uploader-filelist js-uploader-filelist"></div>
-    <div class="uploader-controls">
-      <button type="button" class="js-uploader-button" disabled>アップロード</button>
+      <div class="uploader-add-list js-uploader-add-list"></div>
+      <div class="uploader-add-controls">
+        <button type="button" class="js-uploader-add-button" disabled>アップロード</button>
+      </div>
     </div>
   </div>
 

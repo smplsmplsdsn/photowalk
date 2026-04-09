@@ -2,15 +2,18 @@ $upload-bg: #fff;
 
 .uploader {
   position: relative;
-  height: 100dvh;
-  overflow-y: auto;
   background: $upload-bg;
+
+  .uploader-add {
+    height: 100dvh;
+    overflow-y: auto;
+  }
 
   button:not(:disabled) {
     border-color: $color-default;
   }
 
-  .uploader-function {
+  .uploader-add-function {
     position: sticky;
     top: 0;
     z-index: 2;
@@ -33,7 +36,7 @@ $upload-bg: #fff;
     border-color: #007bff;
   }
 
-  .uploader-filelist {
+  .uploader-add-list {
     padding: 0 20px 10px;
   }
 
@@ -132,7 +135,7 @@ $upload-bg: #fff;
     }
   }
 
-  .uploader-controls {
+  .uploader-add-controls {
     position: sticky;
     bottom: 0;
     z-index: 2;

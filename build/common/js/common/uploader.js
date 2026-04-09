@@ -359,11 +359,11 @@ Fn.uploader = (obj = {}) => {
 
 
   /*  DOM Events */
-  const _uploader = document.querySelector('.js-uploader'),
-        _filelist= document.querySelector('.js-uploader-filelist'),
+  const _uploader = document.querySelector('.js-uploader-add'),
+        _filelist= document.querySelector('.js-uploader-add-list'),
         _drop_area = document.querySelector('.js-uploader-droparea'),
         _input = document.querySelector('.js-uploader-input'),
-        _upload_btn = document.querySelector('.js-uploader-button')
+        _upload_btn = document.querySelector('.js-uploader-add-button')
 
   _drop_area.addEventListener('click', () => _input.click())
 
