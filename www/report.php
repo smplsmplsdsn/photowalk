@@ -222,10 +222,12 @@ if (empty($result)) {
         <span class="en"><?= h($event_name_en) ?> Results Announcement!</span>
       </h1>
       <p>
-        <span class="ja">投票 <?= $total_voters ?>ユーザー</span>
-        <span class="en"><?= $total_voters ?>voters</span>
+        <span class="ja">合計 <?= $total_voters ?>ユーザー、<?= count($results) ?>セレクト</span>
+        <span class="en">Total: <?= $total_voters ?> users, <?= count($results) ?> selections</span>
       </p>
     </hgroup>
+
+    <?php /*
     <label>
       <input type="checkbox" name="vote1">
       <span>
@@ -233,6 +235,8 @@ if (empty($result)) {
         <span class="en">Show 1 and 2</span>
       </span>
     </label>
+    */ ?>
+
     <?php
       uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
       foreach ($grouped as $photowalker => $data):
