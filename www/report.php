@@ -117,6 +117,11 @@ if (empty($result)) {
       padding: 0;
     }
 
+    section {
+      max-width: 600px;
+      margin: 50px 0 0;
+    }
+
     hgroup {
       line-height: 1.5;
     }
@@ -127,10 +132,6 @@ if (empty($result)) {
       font-size: 20px;
     }
 
-    tr[data-count="1"],
-    tr[data-count="2"] {
-      display :none;
-    }
 
     th,
     td {
@@ -138,11 +139,20 @@ if (empty($result)) {
       vertical-align: middle;
     }
 
+    th {
+      width: 60px;
+    }
+
+    td {
+      height: min(80vh, 80vw);
+    }
+
     img {
-      width: 160px;
-      height: 160px;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
-      background: #eee;
+      padding: 10px;
+      border: 1px solid #ccc;
       pointer-events: none;
     }
 
@@ -222,17 +232,11 @@ if (empty($result)) {
         <span class="en"><?= h($event_name_en) ?> Results Announcement!</span>
       </h1>
       <p>
-        <span class="ja">投票 <?= $total_voters ?>ユーザー</span>
-        <span class="en"><?= $total_voters ?>voters</span>
+        <span class="ja">合計 <?= $total_voters ?>ユーザー、<?= count($results) ?>セレクト</span>
+        <span class="en">Total: <?= $total_voters ?> users, <?= count($results) ?> selections</span>
       </p>
     </hgroup>
-    <label>
-      <input type="checkbox" name="vote1">
-      <span>
-        <span class="ja">1と2を表示する</span>
-        <span class="en">Show 1 and 2</span>
-      </span>
-    </label>
+
     <?php
       uasort($grouped, fn($a, $b) => $b['total_like'] <=> $a['total_like']);
       foreach ($grouped as $photowalker => $data):
@@ -240,14 +244,26 @@ if (empty($result)) {
     <section>
       <h2><?= h($photowalker) ?><span style="display:none;"> (<?= count($data['items']) ?>種、<?= $data['total_like'] ?> likes)</span></h2>
       <table>
-        <?php foreach ($data['items'] as $item): ?>
+        <?php
+          $first_like = null;
+
+          foreach ($data['items'] as $item) {
+
+            if ($first_like === null) {
+              $first_like = $item['like_count'];
+            }
+
+            if ($item['like_count'] !== $first_like) {
+              break;
+            }
+          ?>
           <tr data-count="<?= $item['like_count'] ?>">
             <th><?= $item['like_count'] ?></th>
             <td>
               <img src="/assets/photo.php?filename=<?= h($event_id) ?>/<?= h($photowalker) ?>/<?= h($item['filename']) ?>" loading="lazy">
             </td>
           </tr>
-        <?php endforeach; ?>
+        <?php }; ?>
       </table>
     </section>
     <?php endforeach; ?>
@@ -277,17 +293,6 @@ if (empty($result)) {
           }
         })
       }
-
-      $('input[name="vote1"]').on('change', function () {
-
-        if ($(this).prop('checked')) {
-          $(('tr[data-count="1"]')).show()
-          $(('tr[data-count="2"]')).show()
-        } else {
-          $(('tr[data-count="1"]')).hide()
-          $(('tr[data-count="2"]')).hide()
-        }
-      })
     })
 
   </script>
