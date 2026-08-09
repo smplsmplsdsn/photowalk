@@ -42,7 +42,7 @@ if (!$event_id || !$public_id || !$photowalker || !$images || !is_array($images)
 
   echo json_encode([
     'status' => 'fail',
-    'message' => 'Missing required parameters ' . $error_code
+    'message' => 'Missing required parameters ERROR_CODE: ' . $error_code
   ]);
   exit;
 }
