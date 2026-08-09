@@ -377,7 +377,7 @@ $(() => {
       const param = {}
 
       param.event_id = Photos.event_id
-      param.public_id = Photos.handle
+      param.public_id = Photos.handle || Photos.ls.public_id
       param.photowalker = Photos.selected_photowaker
       param.images = []
 
