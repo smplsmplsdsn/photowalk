@@ -22,9 +22,27 @@ $images = $_POST['images'] ?? null;
 
 // ガード
 if (!$event_id || !$public_id || !$photowalker || !$images || !is_array($images)) {
+
+  switch (true) {
+    case !$event_id:
+      $error_code = '1';
+      break;
+    case !$public_id:
+      $error_code = '2';
+      break;
+    case !$photowalker:
+      $error_code = '3';
+      break;
+    case !$images:
+      $error_code = '4';
+      break;
+    default:
+      $error_code = '5';
+  }
+
   echo json_encode([
     'status' => 'fail',
-    'message' => 'Missing required parameters'
+    'message' => 'Missing required parameters ' . $error_code
   ]);
   exit;
 }
