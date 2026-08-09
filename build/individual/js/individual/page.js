@@ -146,7 +146,7 @@ const page_list = `
       <span class="en">Photowalkers</span>
     </h2>
     <ul class="js-photowalkers-list"></ul>
-    <p class="ja">ランダム未投票順</p>
+    <p class="ja" style="display:none;">ランダム未投票順</p>
   </div>
 </section>
 `

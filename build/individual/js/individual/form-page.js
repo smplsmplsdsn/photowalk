@@ -149,6 +149,10 @@ $(() => {
   })
 
   Photos.showList = () => {
+
+    // 初回からランダムなし
+    Photos.is_list_fixed = true
+
     const photowalkers = (Photos.is_list_fixed)? Photos.photowalkers : Fn.shuffle(Photos.photowalkers, true)
     let html_photowalkers_list = ``,
         i,
@@ -385,8 +389,6 @@ $(() => {
 
       try {
         const d = await setLikes(param)
-
-        console.log(d)
 
         // ガード
         if (d.status != 'success') {
