@@ -58,8 +58,7 @@
   line-height: 1.5;
 }
 
-.photos[data-type="submit"] .photos-list,
-.photos[data-type="confirm"] .photos-list[data-layout="column"] {
+.photos-list[data-layout="column"] {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 
   @include mq(760px) {
@@ -72,7 +71,7 @@
   }
 }
 
-.photos[data-type="confirm"] .photos-list[data-layout="one"] {
+.photos-list[data-layout="one"] {
   li {
     height: calc(100vh - $var-size - $var-size - 20px);
   }
