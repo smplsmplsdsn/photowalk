@@ -9,9 +9,6 @@ $_SESSION['upload_dir'] = __DIR__ . '/../storage/photos';
 $_SESSION['public_id'] = 'login_test';
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-if ($is_https) {
-  exit('NOW CLOSED.');
-}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -64,7 +61,7 @@ if ($is_https) {
   <script src="/assets/js/jquery-4.0.0.min.js"></script>
   <script>
     const CSRF_TOKEN = '<?= $_SESSION['csrf_token'] ?>'
-    const CATEGORY = 'koenji3'
+    const CATEGORY = 'test'
   </script>
   <script src="/assets/js/common.min.js?<?php echo filemtime('./assets/js/common.min.js'); ?>"></script>
   <script>
